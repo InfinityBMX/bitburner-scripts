@@ -49,14 +49,18 @@ export function calculateGrowthThreads(ns, target, start, end) {
     if (end <= start) { 
         return 0; 
     }
-
     var threads = 1
-    var needed = end / (start + threads);
-//    console.log(start, end, needed, threads);
+    var needed;
+    // Screw math, lets cheat
+    if (start > 0)
+        needed = 1 + ((end - start) / start);
+    else 
+        needed = 1 + ((end - start) / (start + .0001));
     while (ns.growthAnalyze(target, needed, ns.getServer().cpuCores) > threads) {
         threads++;
-        needed = end / (start + threads);
+        //needed = end / (start + threads);
     }
+    //console.log(start, end, needed, threads);
     return threads;
 }
 
