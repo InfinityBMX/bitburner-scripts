@@ -2,17 +2,18 @@
 // Script loops through all hostnames and finds the best target to hack. Then it sets up the bot net to attack the target.
 export async function main(ns) {
     const depth = ns.args[0] ? ns.args[0] : 1;
+    const includePservs = ns.args[1] ? ns.args[1] : false;
     const start = 'home';
     console.log(`Getting hacked hostnames ${depth} levels deep`);
     const hostnames = getHostnames(ns, start, depth).filter(hostname => ns.getServer(hostname).hasAdminRights);
     console.log(hostnames);
     console.log(getHostnames(ns, start, depth));
-	console.log('Got hostnames. Finding best target.');
-	let bestTarget = {
+    console.log('Got hostnames. Finding best target.');
+    let bestTarget = {
         hostname: 'n00dles',
         maxMoney: 0
     };
-    
+
     hostnames.forEach(hostname => {
         const maxMoney = ns.getServerMaxMoney(hostname);
         if (maxMoney > bestTarget.maxMoney && ns.getServerRequiredHackingLevel(hostname) <= (ns.getPlayer().hacking * .5)) {
@@ -28,18 +29,18 @@ export async function main(ns) {
 
     for (const hostname of hostnames) {
         try {
-            if (hostname !== 'home' /*&& !hostname.startsWith('pserv')*/) {
+            if (hostname !== 'home' && (includePservs || !hostname.startsWith('pserv'))) {
                 ns.killall(hostname);
+                await ns.scp('hack-template.js', start, hostname);
+                const instances = Math.floor(ns.getServerMaxRam(hostname) / ns.getScriptRam('hack-template.js', hostname));
+                const status = instances > 0 ? ns.exec('hack-template.js', hostname, instances, bestTarget.hostname) : 0;
+                if (status > 0)
+                    console.log(`Hacking with ${instances} threads on ${hostname}.`);
+                else
+                    throw 'Exec status 0';
             } else {
                 console.log('Skipping home and pservs');
             }
-            await ns.scp('hack-template.js', start, hostname);
-            const instances = Math.floor(ns.getServerMaxRam(hostname) / ns.getScriptRam('hack-template.js', hostname));
-            const status = instances > 0 ? ns.exec('hack-template.js', hostname, instances, bestTarget.hostname) : 0;
-            if (status > 0)
-                console.log(`Hacking with ${instances} threads on ${hostname}.`);
-            else
-                throw 'Exec status 0';
         } catch (e) {
             console.log(`Failed to start script on ${hostname}`);
             console.error(e);
@@ -49,7 +50,7 @@ export async function main(ns) {
 
 function getHostnames(ns, root, levels) {
     let hostnames = ns.scan(root);
-    if(levels > 1) {
+    if (levels > 1) {
         hostnames.forEach(hostname => {
             hostnames = [...hostnames, ...getHostnames(ns, hostname, levels - 1)];
         })

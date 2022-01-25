@@ -12,7 +12,7 @@ export async function main(ns) {
 		if (killall)
 			ns.killall(hostname);
 		await ns.scp(['orchestrate.js', 'grow.js', 'hack.js', 'weaken.js', 'utils.js'], hostname);
-		const target = servers[i].hostname;
+		const target = servers[i % servers.length].hostname;
 		let instance = 1;
 		while(ns.isRunning('orchestrate.js', hostname, target, instance)) { instance++; }
 		ns.exec('orchestrate.js', hostname, 1, target, instance);
