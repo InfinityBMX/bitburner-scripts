@@ -19,8 +19,8 @@ export async function main(ns) {
         const server = getUsefulServerInfo(ns, hostname);
         let money = server.currentMoney;
         let security = server.currentSecurity;
-        if (round % 10 === 0) 
-            ns.tprint(`Round ${round} Levels for ${hostname}: ${server.currentMoney}/${server.maxMoney} and ${server.currentSecurity}/${server.minSecurity}`);
+        if (round % 25 === 0) 
+            ns.tprint(`Round ${round} Levels for ${hostname}: ${server.currentMoney}/${server.maxMoney} and ${server.currentSecurity}/${server.minSecurity}. $${Math.floor(ns.getScriptIncome(ns.getScriptName(), ns.getHostname(), ...ns.args))}/sec`);
 
         //
         // Security Check
@@ -104,7 +104,6 @@ export async function main(ns) {
                     }
                 } // End of skip hack block
             } // End 
-
             //
             // Hack
             //
@@ -148,75 +147,7 @@ export async function main(ns) {
             } else {
                 console.log('Skipping second weaken');
             }
-/*
-            //
-            // Hack
-            //
-            let currentRatio = money / server.maxMoney;
-            if (currentRatio > 1 - hackPercent) {
-                threads = calculateHackThreads(ns, hostname, hackPercent - (1 - currentRatio));
-                console.log(`Hacking ${hostname} with ${threads} threads.`);
-                // timing
-                waitTime = (timing - 2000) - hackTime;
-                if (threads)
-                    ns.exec('hack.js', ns.getHostname(), threads, hostname, waitTime);
-                //ns.tprint('Hack Time: ', funcTime, ' Wait: ', waitTime);
-                security += ns.hackAnalyzeSecurity(threads);
-                money -= ((ns.hackAnalyze(hostname) * threads) * server.maxMoney);
-                console.log('After Hack - Money: ', money, ' Security: ', security);
-            } else {
-                console.log('Skipping hack');
-            }
 
-            //
-            // Weaken
-            //
-            threads = calculateWeakenThreads(ns, security, server.minSecurity);
-            if (threads > 0) {
-                console.log(`Weakening ${hostname} by ${threads} threads.`);
-                // timing
-                waitTime = (timing - 1500) - weakTime;
-                ns.exec('weaken.js', ns.getHostname(), threads, hostname, waitTime + 10);
-                //ns.tprint('Weaken Time: ', funcTime, ' Wait: ', waitTime);
-            } else {
-                console.log('Skipping weaken');
-            }
-            security = server.minSecurity; // hopefully
-
-            //
-            // Grow
-            //
-            threads = Math.max(1, calculateGrowthThreads(ns, hostname, money, server.maxMoney));
-            if (threads > 0) {
-                // Because grow can get out of hand, cap it at half the RAM
-                //console.log('Calculated Grow Threads: ', threads);
-                threads = Math.min(threads, Math.floor(getAvailableRAM(ns, ns.getHostname(), .7) / ns.getScriptRam('grow.js')))
-                console.log(`Growing ${hostname} by ${threads} threads.`);
-                waitTime = (timing - 1000) - growTime;
-                ns.exec('grow.js', ns.getHostname(), threads, hostname, waitTime);
-                //ns.tprint('Grow Time: ', funcTime, ' Wait: ', waitTime);
-                security += ns.growthAnalyzeSecurity(threads);
-            } else {
-                console.log('Skipping grow');
-            }
-
-            //
-            // Weaken
-            //
-            threads = calculateWeakenThreads(ns, security, server.minSecurity);
-            if (threads > 0) {
-                threads = Math.min(threads, Math.floor(getAvailableRAM(ns, ns.getHostname(), 1) / ns.getScriptRam('weaken.js')))
-                console.log(`Weakening ${hostname} by ${threads} threads.`);
-                // timing
-                waitTime = (timing - 500) - weakTime;
-                ns.exec('weaken.js', ns.getHostname(), threads, hostname, waitTime);
-                //ns.tprint('Weaken Time: ', funcTime, ' Wait: ', waitTime);
-            } else {
-                console.log('Skipping weaken');
-            }
-            security = server.minSecurity; // hopefully
-        }
-*/
         } // End of non-Weaken Only round
         //
         // Cleanup

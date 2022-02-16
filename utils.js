@@ -1,10 +1,9 @@
 /** @param {NS} ns **/
 const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z'];
-const homeCores = 5;
 
-export function output(ns) {
-    ns.tprint('Export called');
-}
+export const canStart = (ns, scriptName) => ns.getScriptRam(scriptName) < getAvailableRAM(ns, ns.getHostname());
+
+export const getAvailableRAM = (ns, hostname) => ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname);
 
 export function getHostnames(ns, findSpecial = false) {
     let serverChecked = [];

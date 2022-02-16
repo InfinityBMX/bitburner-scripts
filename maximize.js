@@ -1,18 +1,22 @@
 /** @param {NS} ns **/
+import { getHostnames } from './utils.js';
+import { MAXIMIZE_PORT, HOME, N00DLES } from './utils/constants.js';
+
 // Script loops through all hostnames and finds the best target to hack. Then it sets up the bot net to attack the target.
 export async function main(ns) {
-    const depth = ns.args[0] ? ns.args[0] : 1;
-    const includePservs = ns.args[1] ? ns.args[1] : false;
-    const start = 'home';
-    console.log(`Getting hacked hostnames ${depth} levels deep`);
-    const hostnames = getHostnames(ns, start, depth).filter(hostname => ns.getServer(hostname).hasAdminRights);
-    console.log(hostnames);
-    console.log(getHostnames(ns, start, depth));
-    console.log('Got hostnames. Finding best target.');
-    let bestTarget = {
-        hostname: 'n00dles',
+    const includePservs = ns.args[0] ? ns.args[0] : false;
+    const forceRefresh = ns.args[1] ? ns.args[1] : false;
+    const n00dles = {
+        hostname: N00DLES,
         maxMoney: 0
     };
+    const port = ns.getPortHandle(MAXIMIZE_PORT);
+
+    let bestTarget = port.empty() ? n00dles : port.read();
+    const previous = bestTarget;
+    console.log(`Getting hacked hostnames`);
+    const hostnames = getHostnames(ns).filter(hostname => ns.getServer(hostname).hasAdminRights);
+    console.log('Got hostnames. Finding best target.');
 
     hostnames.forEach(hostname => {
         const maxMoney = ns.getServerMaxMoney(hostname);
@@ -26,34 +30,30 @@ export async function main(ns) {
     });
 
     console.log('Best target found: ', bestTarget.hostname);
+    port.write(bestTarget);
 
-    for (const hostname of hostnames) {
-        try {
-            if (hostname !== 'home' && (includePservs || !hostname.startsWith('pserv'))) {
-                ns.killall(hostname);
-                await ns.scp('hack-template.js', start, hostname);
-                const instances = Math.floor(ns.getServerMaxRam(hostname) / ns.getScriptRam('hack-template.js', hostname));
-                const status = instances > 0 ? ns.exec('hack-template.js', hostname, instances, bestTarget.hostname) : 0;
-                if (status > 0)
-                    console.log(`Hacking with ${instances} threads on ${hostname}.`);
-                else
-                    throw 'Exec status 0';
-            } else {
-                console.log('Skipping home and pservs');
+    if (bestTarget.hostname !== previous.hostname || forceRefresh) {
+        ns.tprint(`${bestTarget.hostname} is the new best target. SEND IN THE CLOOONES!`);
+        for (const hostname of hostnames) {
+            try {
+                if (hostname !== 'home' && (includePservs || !hostname.startsWith('pserv'))) {
+                    ns.killall(hostname);
+                    await ns.scp('hack-template.js', HOME, hostname);
+                    const instances = Math.floor(ns.getServerMaxRam(hostname) / ns.getScriptRam('hack-template.js', hostname));
+                    const status = instances > 0 ? ns.exec('hack-template.js', hostname, instances, bestTarget.hostname) : 0;
+                    if (status > 0)
+                        console.log(`Hacking with ${instances} threads on ${hostname}.`);
+                    else
+                        throw 'Exec status 0';
+                } else {
+                    console.log('Skipping home and pservs');
+                }
+            } catch (e) {
+                console.log(`Failed to start script on ${hostname}`);
+                console.error(e);
             }
-        } catch (e) {
-            console.log(`Failed to start script on ${hostname}`);
-            console.error(e);
-        }
-    };
-}
-
-function getHostnames(ns, root, levels) {
-    let hostnames = ns.scan(root);
-    if (levels > 1) {
-        hostnames.forEach(hostname => {
-            hostnames = [...hostnames, ...getHostnames(ns, hostname, levels - 1)];
-        })
+        };
+    } else {
+        ns.tprint(`${bestTarget.hostname} is still the best target.`);
     }
-    return [...new Set(hostnames)];
 }

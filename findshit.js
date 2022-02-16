@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-const specialHostnames = ['CSEC','I.I.I.I','avmnite-02h','run4theh111z'];
+const specialHostnames = ['CSEC','I.I.I.I','avmnite-02h','run4theh111z','w0r1d_d43m0n'];
 
 export async function main(ns) {
     let serverChecked = {};
@@ -31,7 +31,7 @@ export async function main(ns) {
 				path.push(next);
 				next = serverChecked[next].parent;
 			}
-			ns.tprint(path.reverse());
+			ns.tprint(path.reverse().map(s => `connect ${s};`).join(''));
 		} else {
 			ns.tprint(`${special} not found`);
 		}

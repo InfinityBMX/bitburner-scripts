@@ -1,6 +1,7 @@
 /** @param {NS} ns **/
 export async function main(ns) {
 	const ram = ns.args[0] ? ns.args[0] : 2048;
+	const setup = ns.args[1];
 	const serverCost = ns.getPurchasedServerCost(ram);
 	let i = 0;
 	ns.tprint(`Purchasing servers with ${ram}GB RAM. Each costs ${serverCost}`);
@@ -15,8 +16,8 @@ export async function main(ns) {
 		}
 		await ns.sleep(1000);
 	}
-	if (ram >= 256)
+	if (ram >= 256 && setup)
 		ns.exec('setup-servers.js', 'home', 1);
 	else
-		ns.exec('maximize.js', 'home');
+		ns.exec('maximize.js', 'home', 1, true);
 }

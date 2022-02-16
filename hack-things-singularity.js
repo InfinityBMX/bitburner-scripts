@@ -2,7 +2,7 @@
 import { backdoorServer } from './utils.js';
 
 let ssh, ftp, smtp, http, sql = false;
-const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z'];
+const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z', 'w0r1d_d43m0n'];
 
 
 export async function main(ns) {
