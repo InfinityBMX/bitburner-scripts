@@ -1,48 +1,75 @@
 /** @param {NS} ns **/
 import {
-    canStart
+	canStart
 } from './utils.js';
 //
 //	Starts rooting script.
 //	First Arg sets ram for pservs
 //
 
-const HACK_SERVERS = 'hack-things-singularity.js';
-const PURCHASE_FILES = 'purchase-files.js';
-const PURCHASE_SERVERS = 'purchase-servers.js';
-const MANAGE_GANG = 'manage-gang.js';
-const MANAGE_SLEEVES = 'sleeve-manager';
-const TARGET_UPDATER = 'update-targets.js';
+const scripts = {
+	HACK_SERVERS: {
+		name: 'hack-things-singularity.js',
+		args: []
+	},
+	PURCHASE_FILES: {
+		name: 'purchase-files.js',
+		args: []
+	},
+	PURCHASE_SERVERS: {
+		name: 'purchase-servers.js',
+		args: []
+	},
+	GANG_MANAGER: {
+		name: 'gang-manager.js',
+		args: []
+	},
+	SLEEVE_MANAGER: {
+		name: 'sleeve-manager.js',
+		args: []
+	},
+	TARGET_UPDATER: {
+		name: 'update-targets.js',
+		args: []
+	},
+	RAM_MANAGER: {
+		name: 'ram-manager.js',
+		args: []
+	}
+}
+
+const interval = 1000;
+const retryInterval = 60000;
 
 export async function main(ns) {
 	const ram = ns.args[0] ? ns.args[0] : 2048;
+	scripts.PURCHASE_SERVERS.args.push(ram);
+	
+	let scriptQueue = [
+		'HACK_SERVERS',
+		'PURCHASE_SERVERS',
+		'RAM_MANAGER',
+		'PURCHASE_FILES',
+		'GANG_MANAGER',
+		'SLEEVE_MANAGER',
+		'TARGET_UPDATER'
+	]
+
 	ns.tprint('Starting');
-	if (canStart(ns, HACK_SERVERS)) {
-		ns.tprint('Firing up hack-things-singularity.js');
-		ns.exec('hack-things-singularity.js', 'home', 1, 10);
-		await ns.sleep(2000);
+	while (scriptQueue.length > 0) {
+		for (const script of scriptQueue){
+			const { name, args } = scripts[script];
+			if (canStart(ns, name)) {
+				ns.tprint(`Firing up ${name}`);
+				ns.exec(name, 'home', 1, ...args);
+				scriptQueue.filter(s => s !== script);
+			} else {
+				ns.tprint(`Can't start ${name}. Not enoug RAM.`);
+			}
+			await ns.sleep(interval);
+		}
+		await ns.sleep(retryInterval);
 	}
-	if (canStart(ns, PURCHASE_FILES)) {
-		ns.tprint('Firing up purchase-files.js');
-		ns.exec('purchase-files.js', 'home', 1);
-		await ns.sleep(2000);
-	}
-	if (canStart(ns, PURCHASE_SERVERS)) {
-		ns.tprint('Firing up purchase-servers.js');
-		ns.exec('purchase-servers.js', 'home', 1, ram);
-		await ns.sleep(2000);
-	}
-	if (canStart(ns, MANAGE_GANG)) {
-		ns.tprint('Firing up manage-gang.js');
-		ns.exec('manage-gang.js', 'home', 1);
-		await ns.sleep(2000);
-	}
-	if (canStart(ns, MANAGE_SLEEVES)) {
-		ns.tprint('Firing up sleeve-manager.js');
-		ns.exec('sleeve-manager.js', 'home', 1);
-	}
-	if (canStart(ns, TARGET_UPDATER)) {
-		ns.tprint('Firing up target-updater.js');
-		ns.exec(TARGET_UPDATER, 'home', 1);
-	}
+
+	ns.tprint('All scripts started');
 }

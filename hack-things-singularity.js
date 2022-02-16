@@ -6,12 +6,10 @@ const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z', 'w0r
 
 
 export async function main(ns) {
-    const depth = ns.args[0] ? ns.args[0] : 5;
-    const start = 'home';
-    const hostnames = getAllHostnames(ns, start, depth);
+    const hostnames = getAllHostnames(ns);
     let unhacked;
     let complete = false;
-    console.log(`Found ${hostnames.length} servers ${depth} hops from ${start}`);
+    console.log(`Found ${hostnames.length} servers`);
 
     while (!complete) {
         let backdoors = [];
@@ -49,16 +47,6 @@ export async function main(ns) {
         }
     }
     console.log('Everything hacked!');
-}
-
-function getHostnames(ns, root, levels) {
-    let hostnames = ns.scan(root);
-    if (levels > 1) {
-        hostnames.forEach(hostname => {
-            hostnames = [...hostnames, ...getHostnames(ns, hostname, levels - 1)];
-        })
-    }
-    return [...new Set(hostnames)];
 }
 
 function getAllHostnames(ns) {
