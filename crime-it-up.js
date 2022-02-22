@@ -19,6 +19,7 @@ const crimes = [
 /** @param {NS} ns */
 export async function main(ns) {
     const manualCrime = ns.args.length == 0 ? undefined : ns.args.join(" "); // Join in case crime has a space
+    ns.disableLog('sleep');
     ns.tail();
     if (!manualCrime || ns.args.includes("--fast-crimes-only"))
         await crimeForKillsKarmaStats(ns, 0, 0, Number.MAX_SAFE_INTEGER, ns.commitCrime, ns.args.includes("--fast-crimes-only"));
@@ -47,7 +48,7 @@ export async function crimeForKillsKarmaStats(ns, reqKills, reqKarma, reqStats, 
             (!needStats && (player.numPeopleKilled < reqKills || karma < reqKarma)) ? "homicide" : // If *all* we need now is kills or Karma, homicide is the fastest way to do that
                 bestCrimesByDifficulty.find((c, index) => doFastCrimesOnly ? index > 1 : crimeChances[c] >= chanceThresholds[index]); // Otherwise, crime based on success chance vs relative reward (precomputed)
         if (lastCrime != crime || (Date.now() - lastStatusUpdateTime) > statusUpdateInterval) {
-            ns.print(`Committing "${crime}" (${(100 * crimeChances[crime]).toPrecision(3)}% success) ` + (forever ? 'forever...' : `until we reach ${strRequirements.map(r => r()).join(', ')}`));
+            ns.print(`Committing "${crime}" (${(100 * crimeChances[crime]).toPrecision(3)}% success) (Karma: ${ns.heart.break()}) ` + (forever ? 'forever...' : `until we reach ${strRequirements.map(r => r()).join(', ')}`));
             lastCrime = crime;
             lastStatusUpdateTime = Date.now();
         }

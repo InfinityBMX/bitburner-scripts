@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z'];
+const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z', 'w0r1d_d43m0n'];
 
 export const canStart = (ns, scriptName) => ns.getScriptRam(scriptName) < getAvailableRAM(ns, ns.getHostname());
 
@@ -109,6 +109,7 @@ export function getTimingsForHostname(ns, hostname) {
     };
 }
 
+/** @param {NS} ns **/
 export async function backdoorServer(ns, hostname) {
     let serverChecked = {};
     let checkList = [];
@@ -160,3 +161,6 @@ export async function backdoorServer(ns, hostname) {
         ns.tprint(`Path to ${hostname} not found.`);
     }
 }
+
+/** @param {NS} ns **/
+export const getPServRAM = (ns) => ns.getPurchasedServers().reduce((previous, hostname) => [previous[0] ? Math.min(previous[0], ns.getServerMaxRam(hostname)) : ns.getServerMaxRam(hostname), Math.max(previous[1], ns.getServerMaxRam(hostname))], [0, 0]);

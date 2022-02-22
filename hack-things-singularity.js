@@ -7,10 +7,11 @@ const specialHostnames = ['CSEC', 'I.I.I.I', 'avmnite-02h', 'run4theh111z', 'w0r
 
 export async function main(ns) {
     const hostnames = getAllHostnames(ns);
+    const INTERVAL = 120000;
     let unhacked;
     let complete = false;
+    let round = 1;
     console.log(`Found ${hostnames.length} servers`);
-
     while (!complete) {
         let backdoors = [];
         let currentAbilities = getAbilities(ns);
@@ -41,12 +42,13 @@ export async function main(ns) {
         }
         if (unhacked.length) {
             console.log(`${unhacked.length} unhacked servers left: `, unhacked);
-            await ns.sleep(120000);
+            round++;
+            await ns.sleep(Math.min(round * 30000, INTERVAL));
         } else {
             complete = true;
         }
     }
-    console.log('Everything hacked!');
+    ns.tprint('Everything hacked!');
 }
 
 function getAllHostnames(ns) {

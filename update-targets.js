@@ -1,27 +1,32 @@
-/** @param {NS} ns **/
 import {
-    canStart
+    canStart,
+	getPServRAM
 } from './utils.js';
 
 const GENERIC_HACK = 'maximize.js';
 const PSERV_HACK = 'setup-servers.js';
-const PSERV_FREQUENCTY = 15;
+const PSERV_FREQUENCY = 15;
+const MAX_INTERVAL = 300000;
 
+/** @param {NS} ns **/
 export async function main(ns) {
+	let serversCanOwn = getPServRAM(ns)[0] > 256; // True if all servers are above 256 RAM
+	let forceRefresh = false;
+	let args = [!serversCanOwn, forceRefresh]; // Arg1 includes pservs in hack, Arg2 updates even if target hasn't changed
 	let keepGoing = true;
-	let lastPserv = 1 - PSERV_FREQUENCTY; // Make sure we start trying at the beginning;
-	let lastServer = 1;
+	let lastPserv = 1 - PSERV_FREQUENCY; // Make sure we start trying at the beginning;
+	let lastServer;
 	let round = 1;
 	while (keepGoing) {
 		if (canStart(ns, GENERIC_HACK)) {
-			ns.exec(GENERIC_HACK, 'home', 1);
+			ns.exec(GENERIC_HACK, 'home', 1, ...args);
 			lastServer = round;
 		}
-		if ( round > lastPserv + PSERV_FREQUENCTY && canStart(ns, PSERV_HACK)) {
+		if (serversCanOwn && round > lastPserv + PSERV_FREQUENCY && canStart(ns, PSERV_HACK)) {
 			ns.exec(PSERV_HACK, 'home', 1, true);
 			lastPserv = round;
 		}
 		round++;
-		await ns.sleep(60000);
+		await ns.sleep(Math.min(MAX_INTERVAL, round * 30000));
 	}
 }

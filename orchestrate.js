@@ -19,8 +19,8 @@ export async function main(ns) {
         const server = getUsefulServerInfo(ns, hostname);
         let money = server.currentMoney;
         let security = server.currentSecurity;
-        if (round % 25 === 0) 
-            ns.tprint(`Round ${round} Levels for ${hostname}: ${server.currentMoney}/${server.maxMoney} and ${server.currentSecurity}/${server.minSecurity}. $${Math.floor(ns.getScriptIncome(ns.getScriptName(), ns.getHostname(), ...ns.args))}/sec`);
+        if (round % 100 === 0) 
+            ns.tprint(`${ns.getHostname()} - Round ${round} Levels for ${hostname}: ${server.currentMoney}/${server.maxMoney} and ${server.currentSecurity}/${server.minSecurity}. $${Math.floor(ns.getScriptIncome(ns.getScriptName(), ns.getHostname(), ...ns.args))}/sec`);
 
         //
         // Security Check

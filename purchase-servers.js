@@ -1,6 +1,10 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-	const ram = ns.args[0] ? ns.args[0] : 2048;
+	const ram = ns.args[0] ?
+		ns.args[0] :
+		ns.fileExists('server-ram.txt') ?
+			ns.read('server-ram.txt') :
+			2048;
 	const setup = ns.args[1];
 	const serverCost = ns.getPurchasedServerCost(ram);
 	let i = 0;

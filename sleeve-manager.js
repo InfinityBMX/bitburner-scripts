@@ -1,11 +1,14 @@
 import { formatMoney, formatDuration } from './utils/formats.js';
+import { getFileContents } from './utils/file-handling.js';
 
 const interval = 5000; // Update this often
 const minTaskWorkTime = 59000; // Sleeves assigned a new task should stick to it for at least this many milliseconds
 const tempFile = '/Temp/sleeve-set-task.txt';
 const crimes = ['mug', 'homicide']
 const works = ['security', 'field', 'hacking']; // When doing faction work, we prioritize physical work since sleeves tend towards having those stats be highest
-const workByFaction = {}
+const workByFaction = {};
+const RESET_THRESHOLD = 600000; // Elapsed ms before it's not considered a reset
+const RESET_TRAINING = 0.5; // Ratio of current run to previous run before we consider player caught up
 
 // const MIN_STATS = 75;
 // const PLAYER_MIN_STATS = 100;
@@ -18,6 +21,13 @@ const TASK_CRIME = 'Crime';
 const TASK_CLASS = 'Class';
 const TASK_WORK = 'Company';
 const TASK_FACTION = 'Faction';
+const STATS = [
+	'hacking',
+	'strength',
+	'defense',
+	'dexterity',
+	'agility'
+];
 
 let options;
 const argsSchema = [
@@ -25,7 +35,7 @@ const argsSchema = [
 	['crime', ''],
 	['aug-budget', 0.5], // Spend up to this much of current cash on augs per tick (Default is high, because these are permanent for the rest of the BN)
 	['buy-cooldown', 60 * 1000], // Must wait this may milliseconds before buying more augs for a sleeve
-	['min-aug-batch', 20], // Must be able to afford at least this many augs before we pull the trigger (or fewer if buying all remaining augs)
+	['min-aug-batch', 10], // Must be able to afford at least this many augs before we pull the trigger (or fewer if buying all remaining augs)
 ];
 
 /** @param {NS} ns **/
@@ -47,6 +57,8 @@ export async function main(ns) {
     }
     for (let i = 0; i < numSleeves; i++)
         availableAugs[i] = null;
+
+	const previousRun = await getFileContents(ns, 'reset-player-stats.json');
 
 	while (true) {
 		let cash = ns.getServerMoneyAvailable("home");
@@ -94,6 +106,15 @@ export async function main(ns) {
                 command = sleeve.setToSynchronize(i);
                 if (task[i] == designatedTask && Date.now() - (lastUpdate[i] ?? 0) > minTaskWorkTime) {
                     log(ns, `INFO: Sleeve ${i} is syncing... ${sync.toFixed(2)}%`);
+                    lastUpdate[i] = Date.now();
+                }
+			} else if (resetDetected(playerInfo) && previousRun && playerNeedsHelp(playerInfo, previousRun)) {
+				const stat = STATS.find((stat) => playerInfo[stat] < previousRun[stat] * RESET_TRAINING);
+				designatedTask = stat === 'hacking' ? TASK_CLASS : TASK_GYM;
+				designatedTaskDesc = `Training ${stat}`;
+				command = stat === 'hacking' ? sleeve.setToUniversityCourse(i, 'Rothman University', 'Algorithms') : sleeve.setToGymWorkout(i, 'Powerhouse Gym', stat);
+                if (task[i] == designatedTask && Date.now() - (lastUpdate[i] ?? 0) > minTaskWorkTime) {
+                    log(ns, `INFO: Sleeve ${i} is ${designatedTaskDesc}`);
                     lastUpdate[i] = Date.now();
                 }
 			} else if (shock > 0 && options['shock-recovery'] > 0 && Math.random() < options['shock-recovery']) { // Recover from shock
@@ -195,6 +216,10 @@ export async function main(ns) {
 	// 	round++;
 	// }
 }
+
+const resetDetected = (player) => player.playtimeSinceLastAug < RESET_THRESHOLD;
+
+const playerNeedsHelp = (player, previous) => STATS.reduce((result, stat) => result || player[stat] < previous[stat] * RESET_TRAINING, false);
 
 function log(ns, log, toastStyle, printToTerminal) {
     ns.print(log);
