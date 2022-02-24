@@ -5,6 +5,8 @@ export async function main(ns) {
 		ns.fileExists('server-ram.txt') ?
 			ns.read('server-ram.txt') :
 			2048;
+	ns.tprint(`PURCHASE args: ${ns.args}`);
+	ns.tprint(`PURCHASE ram: ${ram}`);
 	const setup = ns.args[1];
 	const serverCost = ns.getPurchasedServerCost(ram);
 	let i = 0;
@@ -20,7 +22,7 @@ export async function main(ns) {
 		}
 		await ns.sleep(1000);
 	}
-	if (ram >= 256 && setup)
+	if (ram >= 256 && setup && ram <= 4096)
 		ns.exec('setup-servers.js', 'home', 1);
 	else
 		ns.exec('maximize.js', 'home', 1, true);
