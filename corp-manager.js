@@ -95,8 +95,23 @@ const DEFAULT_MATERIALS = {
 };
 
 const DEFAULT_INDUSTRY_SETTINGS = {
-  employees: 3,
-  jobs: { Operations: 1, Engineer: 1, Business: 1 },
+  employees: {
+    "All": 3,
+    // "Aevum": 3,
+    // "Chongqing": 3,
+    // "Sector-12": 3,
+    // "New Tokyo": 3,
+    // "Ishima": 3,
+    // "Volhaven": 3
+  },
+  jobs: {
+    "All":
+      {
+        Operations: 1,
+        Engineer: 1,
+        Business: 1
+      }
+  },
   warehouse: 300,
   materials: DEFAULT_MATERIALS
 }
@@ -351,8 +366,14 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
 
     // Make sure office has capacity for the employees we want
     let office;
-    while ((office = ns.corporation.getOffice(division, city)).size < settings.employees) {
-      let upgradeSize = settings.employees - office.size;
+    // Size priority is "City" > "All" > 0 so we can set individual city employment
+    let finalSize = settings.employees[city] ?
+      settings.employees[city] :
+      settings.employees["All"] ?
+        settings.employees["All"] :
+        0;
+    while ((office = ns.corporation.getOffice(division, city)).size < finalSize) {
+      let upgradeSize = finalSize - office.size;
       if (ns.corporation.getOfficeSizeUpgradeCost(division, city, upgradeSize) <= ns.corporation.getCorporation().funds) {
         ns.corporation.upgradeOfficeSize(division, city, upgradeSize);
       } else
@@ -372,8 +393,14 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
     }
 
     // Assign Employees
+    // Spread priority is "City" > "All" > {} so we can set individual city assignments
     ns.print("Assigning jobs to employees");
-    await assignJobs(ns, employees, division, city, settings.jobs);
+    let jobSpread = settings.jobs[city] ?
+      settings.jobs[city] :
+      settings.jobs["All"] ?
+        settings.jobs["All"] :
+        {}; // Shouldn't happen
+    await assignJobs(ns, employees, division, city, jobSpread);
 
     // Buy warehourse
     if (!ns.corporation.hasWarehouse(division, city)) {
