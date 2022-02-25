@@ -35,7 +35,7 @@ const UPGRADES = [
 ];
 
 // Settings
-const SETTING_MORALE_MIN = 50.00;
+const SETTING_MORALE_MIN = 99.00;
 const SETTING_FIRST_OFFER_MIN = 100e9;
 const SETTING_FIRST_UPGRADE_SIZE = 9;
 const SETTING_FIRST_UPGRADE_SPREAD = {
@@ -155,10 +155,18 @@ export async function main(ns) {
 
   for (const upgrade of UPGRADES) {
     // Level each upgrade twice
-    for (let i = 1; i <= (2 - corporation.getUpgradeLevel(upgrade)); i++) {
-      corporation.levelUpgrade(upgrade);
+    counter = 1;
+    while (corporation.getUpgradeLevel(upgrade) < 2) {
+      if (corporation.getCorporation().funds >= corporation.getUpgradeLevelCost(upgrade))
+        corporation.levelUpgrade(upgrade);
+      else {
+        if (counter % 10 === 0)
+          ns.print(`Waiting for funds to upgrade ${upgrade}`);
+        await ns.sleep(SLOW_INTERVAL);
+        counter++
+      }
     }
-    ns.print(`${ upgrade } is now level ${ corporation.getUpgradeLevel(upgrade) }`);
+    ns.print(`${upgrade} is now level ${corporation.getUpgradeLevel(upgrade)}`);
   }
 
   for (const city of CITIES) {
@@ -280,7 +288,7 @@ export async function main(ns) {
   });
 
   // Create first product
-  
+
 
   // Upgrade warehouses
   await updateDivision(ns, FIRST_INDUSTRY, FIRST_DIVISION, { ...DEFAULT_INDUSTRY_SETTINGS, warehouse: 2000 });
@@ -402,14 +410,11 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
     }
 
     // Hire new employees if we need to
-    let employees = [
-      ...office.employees.map(employee => ns.corporation.getEmployee(division, city, employee))
-    ];
-    if (employees.length < settings.employees) {
-      ns.print("Hiring ${employees.length settings} employees in ${city}");
-      for (let i = 1; i <= (settings.employees - employees.length); i++) {
+    if (ns.corporation.getOffice(division, city).employees.length < finalSize) {
+      ns.print(`Hiring up to ${finalSize} employees in ${city}`);
+      while (ns.corporation.getOffice(division, city).employees.length < finalSize) {
         // Hire 3 employees for each city
-        employees.push(ns.corporation.hireEmployee(division, city));
+        ns.corporation.hireEmployee(division, city);
         updateSpread = true;
       }
     }
@@ -417,6 +422,9 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
     // Assign Employees
     // Spread priority is "City" > "All" > {} so we can set individual city assignments
     if (updateSpread) {
+      let employees = [
+        ...ns.corporation.getOffice(division, city).employees.map(employee => ns.corporation.getEmployee(division, city, employee))
+      ];
       ns.print("Assigning jobs to employees");
       let jobSpread = settings.jobs[city] ?
         settings.jobs[city] :
