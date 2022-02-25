@@ -75,14 +75,19 @@ const retryInterval = 60000;
 export async function main(ns) {
 	const latePhase = isLatePhase(ns);
 	ns.tprint(`${latePhase ? 'Late Phase' : 'Early Phase'}`);
-	let previousRAM;
+	let previousRAM = await getPreviousRAM(ns);
+
 	const ram = ns.args[0] ?
 		ns.args[0] :
-		(previousRAM = await getPreviousRAM(ns)) ?
+		previousRAM ?
 			previousRAM.pservRAM[0] :
-			2048;
+			32;
 	scripts.PURCHASE_SERVERS.args.push(ram);
 	
+	ns.tprint(`START.JS previousRAM: ${previousRAM.pservRAM}`);
+	ns.tprint(`START.JS ram: ${ram}`);
+	ns.tprint(`START.JS args: ${scripts.PURCHASE_SERVERS.args}`);
+
 	let scriptQueue = [
 		'HACK_SERVERS',
 		'HACK_SERVERS_EARLY',
@@ -103,23 +108,31 @@ export async function main(ns) {
 	while (scriptQueue.length > 0) {
 		for (const script of scriptQueue){
 			const { name, args } = scripts[script];
-			if (canStart(ns, name)) {
-				ns.tprint(`Firing up ${name}`);
+			if (ns.isRunning(name, 'home', ...args)) {
+				ns.tprint(`${name} is already running. Skipping launch.`);
+				scriptQueue = scriptQueue.filter(s => s !== script);
+			} else if (canStart(ns, name)) {
+				ns.tprint(`Firing up ${name} with ${args}`);
 				ns.exec(name, 'home', 1, ...args);
 				scriptQueue = scriptQueue.filter(s => s !== script);
 			} else {
-				ns.tprint(`Can't start ${name}. Not enoug RAM.`);
+				ns.tprint(`Can't start ${name}. Not enough free RAM.`);
 			}
 			await ns.sleep(interval);
 		}
-		await ns.sleep(retryInterval);
+		if (scriptQueue.length)
+			await ns.sleep(retryInterval);
 	}
 
 	ns.tprint('All scripts started');
 }
 
-const getPreviousRAM = async (ns) => await getFileContents(ns, 'reset-server-ram.json');
+const getPreviousRAM = async (ns) => validatePreviousRAM(ns, await getFileContents(ns, 'reset-server-ram.json'));
 
-const isLatePhase = (ns) => ns.getPlayer().playtimeSinceLastBitnode > PHASE_THRESHOLD.time && ns.getServerMaxRam('home') > PHASE_THRESHOLD.ram && false;
+const validatePreviousRAM = async (ns, ram) => ram.playtimeSinceLastBitnode > ns.getPlayer().playtimeSinceLastBitnode ? false : ram;
+
+const isLatePhase = (ns) => ns.getPlayer().playtimeSinceLastBitnode > PHASE_THRESHOLD.time && ns.getServerMaxRam('home') > PHASE_THRESHOLD.ram;
 
 const canStart = (ns, scriptName) => ns.getScriptRam(scriptName) < getAvailableRAM(ns, ns.getHostname());
+
+const getAvailableRAM = (ns, hostname) => ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname);

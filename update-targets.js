@@ -10,7 +10,8 @@ const MAX_INTERVAL = 300000;
 
 /** @param {NS} ns **/
 export async function main(ns) {
-	let serversCanOwn = getPServRAM(ns)[0] > 256; // True if all servers are above 256 RAM
+	let serverRAM = getPServRAM(ns)[0];
+	let serversCanOwn = serverRAM > 256 && serverRAM <= 4096; // True if all servers are above 256 RAM
 	let forceRefresh = false;
 	let args = [!serversCanOwn, forceRefresh]; // Arg1 includes pservs in hack, Arg2 updates even if target hasn't changed
 	let keepGoing = true;
