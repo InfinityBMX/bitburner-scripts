@@ -136,3 +136,5 @@ const isLatePhase = (ns) => ns.getPlayer().playtimeSinceLastBitnode > PHASE_THRE
 const canStart = (ns, scriptName) => ns.getScriptRam(scriptName) < getAvailableRAM(ns, ns.getHostname());
 
 const getAvailableRAM = (ns, hostname) => ns.getServerMaxRam(hostname) - ns.getServerUsedRam(hostname);
+
+const notRunning = (ns, scriptName, args) => ns.isRunning

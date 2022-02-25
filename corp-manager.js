@@ -193,8 +193,12 @@ export async function main(ns) {
   // Upgrade corp again
   await updateDivision(ns, FIRST_INDUSTRY, FIRST_DIVISION, {
     ...DEFAULT_INDUSTRY_SETTINGS,
-    employees: SETTING_FIRST_UPGRADE_SIZE,
-    jobs: SETTING_FIRST_UPGRADE_SPREAD
+    employees: {
+      "All": SETTING_FIRST_UPGRADE_SIZE
+    },
+    jobs: {
+      "All": SETTING_FIRST_UPGRADE_SPREAD
+    }
   });
 
   // Upgrade Smart stuff to level 10 each
@@ -263,7 +267,17 @@ export async function main(ns) {
 
   // Start Division 2
   ns.print(`Creating ${SECOND_DIVISION} in the ${SECOND_INDUSTRY} Industry`);
-  await updateDivision(ns, SECOND_INDUSTRY, SECOND_DIVISION, DEFAULT_INDUSTRY_SETTINGS);
+  await updateDivision(ns, SECOND_INDUSTRY, SECOND_DIVISION, {
+    ...DEFAULT_INDUSTRY_SETTINGS,
+    employees: {
+      "All": SETTING_FIRST_UPGRADE_SIZE,
+      "Aevum": 30
+    },
+    jobs: {
+      "All": SETTING_FIRST_UPGRADE_SPREAD,
+      "Aevum": getEvenSpread(30)
+    }
+  });
 }
 
 /**
@@ -461,4 +475,14 @@ const updateMaterials = async (ns, division, city, materials) => {
   ns.corporation.buyMaterial(division, city, MATERIAL_HARDWARE, 0);
   ns.corporation.buyMaterial(division, city, MATERIAL_AI_CORES, 0);
   ns.corporation.buyMaterial(division, city, MATERIAL_REAL_ESTATE, 0);
+}
+
+const getEvenSpread = (population) => {
+  return {
+    Operations: (population / 5),
+    Engineer: (population / 5),
+    Business: (population / 5),
+    "Research & Development": Math.floor(population / 5) + (population % 5),
+    Management: (population / 5)
+  }
 }
