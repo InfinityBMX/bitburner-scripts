@@ -278,6 +278,12 @@ export async function main(ns) {
       "Aevum": getEvenSpread(30)
     }
   });
+
+  // Create first product
+  
+
+  // Upgrade warehouses
+  await updateDivision(ns, FIRST_INDUSTRY, FIRST_DIVISION, { ...DEFAULT_INDUSTRY_SETTINGS, warehouse: 2000 });
 }
 
 /**
@@ -372,6 +378,7 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
   }
 
   for (const city of CITIES) {
+    let updateSpread = false;
     // Expand if not in city
     if (!ns.corporation.getDivision(division).cities.includes(city)) {
       ns.print(`Expanding ${division} to ${city}`);
@@ -403,18 +410,23 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
       for (let i = 1; i <= (settings.employees - employees.length); i++) {
         // Hire 3 employees for each city
         employees.push(ns.corporation.hireEmployee(division, city));
+        updateSpread = true;
       }
     }
 
     // Assign Employees
     // Spread priority is "City" > "All" > {} so we can set individual city assignments
-    ns.print("Assigning jobs to employees");
-    let jobSpread = settings.jobs[city] ?
-      settings.jobs[city] :
-      settings.jobs["All"] ?
-        settings.jobs["All"] :
-        {}; // Shouldn't happen
-    await assignJobs(ns, employees, division, city, jobSpread);
+    if (updateSpread) {
+      ns.print("Assigning jobs to employees");
+      let jobSpread = settings.jobs[city] ?
+        settings.jobs[city] :
+        settings.jobs["All"] ?
+          settings.jobs["All"] :
+          {}; // Shouldn't happen
+      await assignJobs(ns, employees, division, city, jobSpread);
+    } else {
+      ns.print(`No need to update spread in ${city}`);
+    }
 
     // Buy warehourse
     if (!ns.corporation.hasWarehouse(division, city)) {
