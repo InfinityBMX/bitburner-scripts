@@ -1,4 +1,5 @@
 import { formatMoney, formatNumberShort } from './utils/formats.js';
+import {NS} from '.';
 
 // Names
 const CORP_NAME = 'ULDK';
@@ -6,7 +7,7 @@ const FIRST_INDUSTRY = 'Agriculture';
 const FIRST_DIVISION = 'Devils Lettuce';
 const SECOND_INDUSTRY = 'Tobacco';
 const SECOND_DIVISION = 'Old Smokey';
-const TOBACCO_PRFX = 'Tobacco-v';
+const TOBACCO_PRFX = 'Tobacco v';
 
 const SLOW_INTERVAL = 5000;
 const FAST_INTERVAL = 1000;
@@ -19,8 +20,9 @@ const MATERIAL_REAL_ESTATE = 'Real Estate';
 const MATERIAL_ROBOTS = 'Robots';
 const UPGRADE_SMART_FACTORIES = 'Smart Factories';
 const UPGRADE_SMART_STORAGE = 'Smart Storage';
+const CITY_AEVUM = 'Aevum';
 const CITIES = [
-  "Aevum",
+  CITY_AEVUM,
   "Chongqing",
   "Sector-12",
   "New Tokyo",
@@ -73,7 +75,17 @@ const SETTING_THIRD_MATERIALS = {
 };
 const SETTING_SECOND_OFFER_MIN = 2e12;
 // Industry 2
-const SETTING_UPGRADES_SECOND_LEVEL = 20;
+const SETTING_UPGRADES_MIN = 20;
+const SETTING_WILSON_MIN = 14;
+const SETTING_EARLY_WILSON_CAP = 0.20; // Money ratio before Min
+const SETTING_EARLY_UPGRADE_CAP = 0.10; // Money ratio before min
+const SETTING_LATE_WILSON_CAP = 0.05;
+const SETTING_LATE_UPGRADE_CAP = 0.025;
+const SETTING_AD_CAP = 0.05;
+const SETTING_PRODUCT_CAP = 0.20;
+const SETTING_SIZE_CAP = 0.20;
+const SETTING_WAREHOUSE_CAP = 0.05;
+const SETTING_WAREHOUSE_MIN = 3000;
 
 const POSITION_RANDD = 'Research & Development';
 const POSITION_BUSINESS = 'Business';
@@ -285,113 +297,38 @@ export async function main(ns) {
   /* EXPAND TO FIRST PRODUCT! */
   // Start Division 2
   ns.print(`Creating ${SECOND_DIVISION} in the ${SECOND_INDUSTRY} Industry`);
-  // Set Aevum to 30, all other offices to 9 people, buy warehouses
+  // Set Aevum to 30, all other offices to 15 people, buy warehouses
   await updateDivision(ns, SECOND_INDUSTRY, SECOND_DIVISION, {
     ...DEFAULT_INDUSTRY_SETTINGS,
     employees: {
-      "All": SETTING_FIRST_UPGRADE_SIZE,
+      "All": 15,
       "Aevum": 30
     },
     jobs: {
-      "All": SETTING_FIRST_UPGRADE_SPREAD,
+      "All": getEvenSpread(15),
       "Aevum": getEvenSpread(30)
     }
   });
-  ns.print("*** TIME TO CREATE PRODUCTS!");
-  // Create product!
-  ns.print("Creating our first Tobacco product!");
-  let productNames = ns.corporation.getDivision(SECOND_DIVISION).products;
-  if (productNames.length === 0) {
-    ns.print("Developing new product");
-    let productName = developNewProduct(ns, SECOND_DIVISION);
-    ns.corporation.sellProduct(SECOND_DIVISION, "Aevum", productName, "MAX", "MP", true);
-    ns.corporation.setProductMarketTA2(SECOND_DIVISION, productName, true);
-  }
-  // Upgrade Wilson Analytics while we have > $3t
-  ns.print("Leveling up Wilson Analytics...");
-  let wilsonCost;
-  while (ns.corporation.getCorporation().funds > 3e12
-          && (wilsonCost = ns.corporation.getUpgradeLevelCost(WILSON)) <= ns.corporation.getCorporation().funds) {
-    ns.print(`Upgrading ${WILSON} for $${formatNumberShort(wilsonCost)}`);
-    ns.corporation.levelUpgrade(WILSON);
-  }
-  ns.print("Wilson Analytics is now at " + ns.corporation.getUpgradeLevel(WILSON));
-  // Level upgrades to 20
-  ns.print("Upgrading Employee-focused upgrades to level " + SETTING_UPGRADES_SECOND_LEVEL);
-  for (const upgrade of UPGRADES) {
-    // ignore Smart Factories/Smart Warehouses for this
-    if (upgrade.includes("Smart")) continue
-    while (ns.corporation.getUpgradeLevel(upgrade) < SETTING_UPGRADES_SECOND_LEVEL) {
-      for (let i = 1; i <= SETTING_UPGRADES_SECOND_LEVEL - ns.corporation.getUpgradeLevel(upgrade); i++) {
-        ns.corporation.levelUpgrade(upgrade);
-        await ns.sleep(FAST_INTERVAL);
-      }
-      if (ns.corporation.getUpgradeLevel(upgrade) === SETTING_UPGRADES_SECOND_LEVEL) {
-        ns.print(`${upgrade} is now level ${ns.corporation.getUpgradeLevel(upgrade)}`);
-      } else {
-        ns.print(`${upgrade} not fully upgraded. Sleeping.`);
-      }
-      await ns.sleep(1000);
-    }
-  }
-  // Dump the rest of our funds into AdVert
-  ns.print("Spending the rest of the funds on AdVert");
-  let advertCost;
-  while ((advertCost = ns.corporation.getHireAdVertCost(SECOND_DIVISION)) < ns.corporation.getCorporation().funds) {
-    ns.print(`Hiring AdVert for ${formatNumberShort(advertCost)}`);
-    ns.corporation.hireAdVert(SECOND_DIVISION);
-  }
-  // Get 3 products out there
-  ns.print("Executing main corp loop until we have 3 products");
-  while (ns.corporation.getDivision(SECOND_DIVISION).products.length < 3) {
-    // Don't develop a new product until the old one is done
-    await waitForDevelopment(ns, SECOND_DIVISION);
-    developNewProduct(ns, SECOND_DIVISION);
-  }
-  // Finish developing any products before moving on to the next phase
-  await waitForDevelopment(ns, SECOND_DIVISION);
 
-  ns.print("Expand Aevum to 60 employees");
-  // Expand Aevum to 60
-  await updateDivision(ns, SECOND_INDUSTRY, SECOND_DIVISION, {
-    ...DEFAULT_INDUSTRY_SETTINGS,
-    employees: {
-      "All": SETTING_FIRST_UPGRADE_SIZE,
-      "Aevum": 60
-    },
-    jobs: {
-      "All": SETTING_FIRST_UPGRADE_SPREAD,
-      "Aevum": getEvenSpread(60)
-    }
-  });
-  // Loop the main corp loop until we can afford Market.TA1+2
-  ns.print("Beginning corporation loop until we have purchased Market-TA.1 + 2...")
-  while (
-    !ns.corporation.hasResearched(SECOND_DIVISION, HIGH_TECH_LAB) &&
-    !ns.corporation.hasResearched(SECOND_DIVISION, MARKET_TA1) &&
-    !ns.corporation.hasResearched(SECOND_DIVISION, MARKET_TA2)
-    ) {
-    await corpLoop(ns, SECOND_INDUSTRY);
-  }
+  // Accept another bunch of money. Possibly a bad deal
+  // ns.corporation.acceptInvestmentOffer();
 
-  // Now get any remaining investment offers and go public!
-  ns.print("Looking for investors again; hoping for at least $150t")
-  while (offer = ns.corporation.getInvestmentOffer().round <= 4) {
-    // Demand at least $800t
-    await seekInvestmentOffer(ns, 800e12);
-    await ns.sleep(30000);
-  }
-  // Go public!
-  let went_public = ns.corporation.goPublic(0);
-  if (went_public) {
+  // Just go public. not selling stock so why wait?
+  if (ns.corporation.goPublic(0)) {
     ns.print("🎉🎉🎉 WE HAVE IPO!!!");
-    ns.corporation.issueDividends(0.1);
+    ns.corporation.issueDividends(0.2);
+  }
+
+  // All done. Passive mode
+  ns.print("Beginning corporation maintenance loop");
+  while ( true ) {
+    await productLoop(ns, SECOND_INDUSTRY, SECOND_DIVISION);
   }
 }
 
 /**
- * Buy scientific research
- * @param {import("../.").NS}  ns
+ * Get Investment Offer
+ * @param {NS}  ns
  * @param {number} minimum Minimum desired amount for the offer
  */
 async function seekInvestmentOffer(ns, minimum) {
@@ -628,7 +565,7 @@ const getEvenSpread = (population) => {
 
 /**
  * Create a new iteratively-named product
- * @param {import("../.").NS} ns
+ * @param {NS} ns
  * @param {string} division The division we're building in
  * @returns {string} Name of new product
  */
@@ -642,38 +579,33 @@ function developNewProduct(ns, division) {
 
 /**
  * Calculate the next product name
- * @param {import("../.").NS} ns
+ * @param {NS} ns
  * @param {string} division The division we're building in
  * @returns the next product name
  */
 function nextProductName(ns, division) {
-  let product_names = ns.corporation.getDivision(division).products.sort((a, b) => a - b);
-  let last_version = 1;
-  // If there are existing products, try to figure out the last one
-  if (product_names.length > 0) {
-    let last_char = product_names.slice(-1)[0].slice(9);
-    // if the last character is a number (not NaN), use it for evaluation
-    if (!isNaN(last_char)) last_version = Number(last_char);
-  }
-  return TOBACCO_PRFX + (last_version + 1);
+  let lastNumber = ns.corporation.getDivision(division).products.reduce(
+    (previous, product) => Math.max(previous, product.slice(TOBACCO_PRFX.length)) , 0);
+  // No products returns 0, otherwise last number
+  return TOBACCO_PRFX + (lastNumber + 1);
 }
 
 /**
- * Discontinue the oldest product (based on name)
- * @param {import("../.").NS}
+ * Discontinue the weakest product (based on demand)
+ * @param {NS} ns
  * @param {*} division The division we're building in
  */
-async function discontinueOldestProduct(ns, division) {
-  let product_names = ns.corporation.getDivision(division).products.sort((a, b) => a - b);
-  // ns.print("Product names: " + product_names);
+async function discontinueWeakestProduct(ns, division) {
+  let product_names = ns.corporation.getDivision(division).products.sort(
+    (a, b) => ns.corporation.getProduct(division, a).dmd - ns.corporation.getProduct(division, b).dmd);
   // Safety net, don't discontinue if we have no products
-  if (product_names.length == 0) return
+  if (product_names.length < 3) return
   // Sell all of it at MP to get rid of all inventory
   ns.print(`Selling off ${product_names[0]}`);
   ns.corporation.setProductMarketTA2(division, product_names[0], false);
-  ns.corporation.sellProduct(division, "Aevum", product_names[0], "MAX", "MP", true);
+  ns.corporation.sellProduct(division, CITY_AEVUM, product_names[0], "MAX", "MP", true);
   ns.print("Waiting 10 seconds...");
-  await ns.sleep(10000); // wait 20 seconds for two ticks to sell all inventory
+  await ns.sleep(10000); // wait 10 seconds to sell inventory
   ns.print("Discontinuing product");
   // Now discontinue once we're done selling
   ns.corporation.discontinueProduct(division, product_names[0]);
@@ -681,7 +613,7 @@ async function discontinueOldestProduct(ns, division) {
 
 /**
  * Wait until there are no products in development
- * @param {import("../.").NS}
+ * @param {NS}
  * @param {*} division The division we're building in
  */
 async function waitForDevelopment(ns, division) {
@@ -691,4 +623,162 @@ async function waitForDevelopment(ns, division) {
     await ns.sleep(60000);
   }
   ns.print(`${product} development complete.`);
+}
+
+/**
+ * @param {NS} ns 
+ * @param {string} industry
+ * @param {string} division 
+ * @returns {Promise<void>}
+ */
+const productLoop = async (ns, industry, division) => {
+  // Check product creation and create if not currently
+  // Could be a while if product nearly completed
+  // Checks to make sure we have 3 products including one being created
+  // If a product is near 95% completion, wait until it's done to move on
+  await manageProducts(ns, division);
+
+  // Check Wilson against threshold (14)
+  // Upgrade at a higher fund rate up to 14
+  // Upgrade 1 lever per round max
+  if (ns.corporation.getUpgradeLevel(WILSON) < SETTING_WILSON_MIN) {
+    levelUpgrade(ns, WILSON, SETTING_EARLY_WILSON_CAP);
+  }
+
+  // Check Upgrades against threshold (20)
+  // Upgrade at a higher fund rate up to 20
+  // Upgrade 1 level per round max
+  for (const upgrade of UPGRADES) {
+    if (ns.corporation.getUpgradeLevel(upgrade) < SETTING_UPGRADES_MIN) {
+      levelUpgrade(ns, upgrade, SETTING_EARLY_UPGRADE_CAP);
+    }
+  }
+
+  // Check ads against money
+  // Buy ad if cost below funds threshold
+  // Only buy 1 per round
+  if (ns.corporation.getCorporation().funds * SETTING_AD_CAP < ns.corporation.getHireAdVertCost(division)) {
+    ns.print(`Hiring AdVert for ${formatMoney(ns.corporation.getHireAdVertCost(division))}`);
+    ns.corporation.hireAdVert(division);
+  }
+
+  // Check all upgrades against money
+  // Upgrade infinitely as long as upgrade cost is below funds threshold
+  // Upgrade each up to 1 level per round
+  for (const upgrade of [WILSON,...UPGRADES]) {
+    levelUpgrade(ns, upgrade, upgrade === WILSON ? SETTING_LATE_WILSON_CAP : SETTING_LATE_UPGRADE_CAP);
+  }
+
+  // Check expansion against money
+  // Expand AEVUM first then catch everyone up to AEVUM - 15
+  let size = {}; // will contain cities as keys with office sizes and max as largest non-aevum size
+  CITIES.forEach(city => { 
+    let size = ns.corporation.getOffice(division, city).size;
+    size[city] = size;
+    if (city !== CITY_AEVUM && size > size.max)
+      size.max = size;
+  });
+  for (const city of CITIES) {
+    let expansionBudget = ns.corporation.getCorporation().funds * SETTING_SIZE_CAP;
+     // upgrade if under cap and other cities have caught up
+    if (
+      (city === CITY_AEVUM && size[city] <= size.max + 15) || // Aevum and others have caught up
+      (size[city] < size[max] || size[city] < size[CITY_AEVUM] - 15) && // Others and not caught up
+      expansionBudget >= ns.corporation.getOfficeSizeUpgradeCost(division, city, 15)) {
+      let settings = {
+        ...DEFAULT_INDUSTRY_SETTINGS,
+        employees: {
+          [city]: size[city] + 15
+        },
+        spread: {
+          [city]: getEvenSpread(size[city] + 15)
+        }
+      }
+      await updateDivision(ns, industry, division, settings);
+    }
+  }
+
+  // Warehouses should be at least 3000
+  // Upgrade 1 level per round until MIN if we have money
+  for (const city of CITIES) {
+    let warehouseBudget = ns.corporation.getCorporation().funds * SETTING_WAREHOUSE_CAP;
+    if (ns.corporation.getWarehouse(division, city).size < SETTING_WAREHOUSE_MIN && 
+      ns.corporation.getUpgradeWarehouseCost(division, city)) {
+        ns.corporation.upgradeWarehouse(division, city);
+      }
+  }
+
+  // Check research
+  // Immediately research if able to. Probably best to not wipe out all research but YOLO
+  for (const research of [HIGH_TECH_LAB, MARKET_TA1, MARKET_TA2]) {
+    if (!ns.corporation.hasResearched(division, research)) {
+      if (ns.corporation.getResearchCost(division, research) < ns.corporation.getDivision(division).research)
+        ns.corporation.research(division, research);
+    }
+  }
+}
+
+/**
+ * @param {NS} ns 
+ * @param {string} division 
+ * @returns {Promise<void>}
+ */
+const manageProducts = async (ns, division) => {
+  // See if we're creating a product
+  let product = ns.corporation.getDivision(division).products.find(
+    prod => ns.corporation.getProduct(division, prod).developmentProgress < 100);
+  // If so, see if we're almost done
+  if (product) {
+    if (ns.corporation.getProduct(division, product).developmentProgress > 95) {
+      // Product almost done
+      ns.print(`${product} is ${ns.corporation.getProduct(division, product).developmentProgress > 95}% complete. Waiting.`);
+      while ( ns.corporation.getProduct(division, product).developmentProgress < 100 ) {
+        await ns.sleep(FAST_INTERVAL);
+      }
+      // Selling should be picked up below
+    }
+  } else { // If not, start
+    let products;
+    if ((products = ns.corporation.getDivision(division).products).length === 3) {
+      // discontinue worst
+      await discontinueWeakestProduct(ns, division);
+    }
+    // Create new one with X% of funds
+    let productInvestment = Math.floor((ns.corporation.getCorporation().funds * SETTING_PRODUCT_CAP) / 2);
+    ns.corporation.makeProduct(division, CITY_AEVUM, getProductName(products), productInvestment, productInvestment);
+  }
+  // Make sure all products are being sold
+  for (const product of ns.corporation.getDivision(division).products.map(prod => ns.corporation.getProduct(division, prod))) {
+    if (!product.sCost.includes('MP')) {
+      ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*1', true);
+    } else if (product.cityData[CITY_AEVUM][1] > product.cityData[CITY_AEVUM][2]) {
+      // if production > sold, lower price
+      let currentMult = product.sCost.slice('MP*'.length);
+      // if currently MP*1 or less, cut price in half instead of subtracting 1
+      ns.corporation.sellProduct(division, CITY_AEVUM, product, 'MAX', 'MP*' + (currentMult <= 1 ? currentMult * 0.5 : currentMult - 1), true);
+    } else if (product.cityData[CITY_AEVUM][1] <= product.cityData[CITY_AEVUM][2]) {
+      // if production < sold, raise price
+      let currentMult = product.sCost.slice('MP*'.length);
+      ns.corporation.sellProduct(division, CITY_AEVUM, product, 'MAX', 'MP*' + (currentMult < 1 ? 1 : currentMult + 1), true);
+    }
+    // Try to turn on TA2, just in case we have it
+    if (product.cityData[CITY_AEVUM][0] < 1000) // If we don't have a surplus
+      ns.corporation.setProductMarketTA2(division, product, true);
+  }
+}
+
+/**
+ * See if we can upgrade and do so if we can
+ * @param {NS} ns 
+ * @param {string} upgrade
+ * @param {number} cap
+ * @returns {boolean}
+ */
+const levelUpgrade = (ns, upgrade, cap) => {
+  if (ns.corporation.getCorporation().funds * cap > ns.corporation.getUpgradeLevelCost(upgrade)) {
+    ns.print(`Upgrading ${upgrade} for ${formatMoney(ns.corporation.getUpgradeLevelCost(upgrade))}`);
+    ns.corporation.levelUpgrade(upgrade);
+    return true;
+  }
+  return false;
 }
