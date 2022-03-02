@@ -29,13 +29,20 @@ const CITIES = [
   "Ishima",
   "Volhaven"
 ];
-const UPGRADES = [
+const EARLY_UPGRADES = [
   "FocusWires",
   "Neural Accelerators",
   "Speech Processor Implants",
-  "Nuoptimal Nootropic Injector Implants",
-  "Smart Factories"
+  "Nuoptimal Nootropic Injector Implants"
 ];
+const UPGRADES = [
+  ...EARLY_UPGRADES,
+  "Smart Factories",
+  "Smart Storage",
+  "ABC SalesBots",
+  "DreamSense",
+  "Project Insight"
+]
 const UNLOCKS = [
   SMART_SUPPLY,
   "Market Research - Demand",
@@ -184,7 +191,7 @@ export async function main(ns) {
     corporation.hireAdVert(FIRST_DIVISION);
   }
 
-  for (const upgrade of UPGRADES) {
+  for (const upgrade of EARLY_UPGRADES) {
     // Level each upgrade twice
     counter = 1;
     while (corporation.getUpgradeLevel(upgrade) < 2) {
@@ -619,7 +626,7 @@ const productLoop = async (ns, industry, division, output) => {
   // Check Upgrades against threshold (20)
   // Upgrade at a higher fund rate up to 20
   // Upgrade 1 level per round max
-  for (const upgrade of UPGRADES) {
+  for (const upgrade of EARLY_UPGRADES) {
     if (ns.corporation.getUpgradeLevel(upgrade) < SETTING_UPGRADES_MIN) {
       levelUpgrade(ns, upgrade, SETTING_EARLY_UPGRADE_CAP);
     }
