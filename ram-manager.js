@@ -1,7 +1,8 @@
 import { formatMoney, formatNumberShort } from './utils/formats.js'
 
-const default_home_spend = 0.1; // Don't spend more than this proportion of money
-const default_pserv_spend = 0.01;
+const MIN_RAM_TO_LIMIT = 2048;
+const DEFAULT_HOME_SPEND = 0.1; // Don't spend more than this proportion of money
+const DEFAULT_PSERV_SPEND = 0.01;
 const INTERVAL = 5000;
 const FAIL_UPDATE_FREQUENCY = 15;
 
@@ -10,19 +11,19 @@ export async function main(ns) {
 	ns.disableLog('sleep');
 	ns.disableLog('getServerMoneyAvailable');
 	ns.disableLog('getServerMaxRam');
-	const max_spend_ratio = ns.args[0] ?
+	const maxSpendRatio = ns.args[0] ?
 		ns.args[0] :
-		default_home_spend;
-	const max_pserv_spend_ratio = ns.args[1] ?
+		DEFAULT_HOME_SPEND;
+	const maxPservSpendRatio = ns.args[1] ?
 		ns.args[1] :
-		default_pserv_spend;
+		DEFAULT_PSERV_SPEND;
 	const pservMaxRAM = ns.getPurchasedServerMaxRam();
 	let round = 1;
 	while (true) {
 		let currentRam = ns.getServerMaxRam("home");
 		const money = ns.getServerMoneyAvailable("home");
-		const spendable = money * max_spend_ratio;
-		const pservSpendable = money * max_pserv_spend_ratio;
+		const spendable = currentRam < MIN_RAM_TO_LIMIT ? money : money * maxSpendRatio;
+		const pservSpendable = money * maxPservSpendRatio;
 		const cost = ns.getUpgradeHomeRamCost();
 		const nextRam = currentRam * 2;
 		const upgradeDesc = `home RAM from ${formatNumberShort(currentRam)}GB to ${formatNumberShort(nextRam)}GB`;
@@ -33,6 +34,7 @@ export async function main(ns) {
 		} else if (ns.upgradeHomeRam()) {
 			upgradedHome = true;
 			announce(ns, `SUCCESS: Upgraded ${upgradeDesc}`, 'success');
+			ns.tprint(`Next home RAM upgrade is ${formatMoney(ns.getUpgradeHomeRamCost())} for ${nextRam * 2}GB`);
 			if (nextRam != ns.getServerMaxRam("home"))
 				announce(ns, `WARNING: Expected to upgrade ${upgradeDesc}, but new home ram is ${formatNumberShort(ns.getServerMaxRam("home"))}GB`, 'warning');
 		} else {

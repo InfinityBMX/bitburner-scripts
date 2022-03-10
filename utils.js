@@ -100,7 +100,7 @@ export function getTimingsForHostname(ns, hostname) {
     const weakTime = Math.ceil(ns.getWeakenTime(hostname));
     const growTime = Math.ceil(ns.getGrowTime(hostname));
     const timing = Math.max(Math.ceil(hackTime / 5000) * 5000, Math.ceil(weakTime / 5000) * 5000, Math.ceil(growTime / 5000) * 5000) + 2000;
-    //ns.tprint(`Timing for ${hostname} is ${timing} based on ${hackTime} hack, ${weakTime} weak and ${growTime} grow.`);
+    ns.print(`Timing for ${hostname} is ${timing} based on ${hackTime} hack, ${weakTime} weak and ${growTime} grow.`);
     return {
         timing,
         hackTime,

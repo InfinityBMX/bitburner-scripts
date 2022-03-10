@@ -1,6 +1,7 @@
 import {
     canStart,
-	getPServRAM
+	getPServRAM,
+	getAvailableRAM
 } from './utils.js';
 
 const GENERIC_HACK = 'maximize.js';
@@ -27,7 +28,11 @@ export async function main(ns) {
 			ns.exec(PSERV_HACK, 'home', 1, true);
 			lastPserv = round;
 		}
+		//if (getAvailableRAM(ns, 'home') < 64) {
+		//	break;
+		//}
 		round++;
 		await ns.sleep(Math.min(MAX_INTERVAL, round * 30000));
 	}
+	ns.tprint('Ending update-targets.js');
 }

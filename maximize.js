@@ -12,6 +12,7 @@ export async function main(ns) {
         hostname: N00DLES,
         maxMoney: 0
     };
+    const includeHacknet = ns.args[2] ? ns.args[2] : false;
     const port = ns.getPortHandle(MAXIMIZE_PORT);
 
     let bestTarget = port.empty() ? n00dles : port.read();
@@ -41,7 +42,7 @@ export async function main(ns) {
     }
     for (const hostname of hostnames) {
         try {
-            if (hostname !== 'home' && (includePservs || !hostname.startsWith('pserv'))) {
+            if (hostname !== 'home' && (includePservs || !hostname.startsWith('pserv')) && (includeHacknet || !hostname.startsWith('hacknet'))) {
                 if (forceRefresh || !ns.isRunning(SCRIPT_NAME, hostname, bestTarget.hostname)) {
                     ns.killall(hostname);
                     await ns.scp('hack-template.js', HOME, hostname);

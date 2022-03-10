@@ -1,7 +1,9 @@
 import { formatDuration } from './utils/formats.js';
 /** @param {NS} ns **/
 export async function main(ns) {
+	const flagdata = ns.flags([
+		["focus", "money"]
+	]);
 	ns.tail();
-	let player = ns.getPlayer();
-	ns.print(formatDuration(player.playtimeSinceLastBitnode));
+	ns.print(flagdata.focus);
 }

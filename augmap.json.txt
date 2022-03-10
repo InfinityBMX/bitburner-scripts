@@ -1,0 +1,1993 @@
+{
+  "BitWire": {
+    "stats": {
+      "hacking_mult": 1.05
+    },
+    "repreq": 3750,
+    "cost": 130321000,
+    "prereqs": [],
+    "factions": [
+      "CyberSec",
+      "NiteSec",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Synaptic Enhancement Implant": {
+    "stats": {
+      "hacking_speed_mult": 1.03
+    },
+    "repreq": 2000,
+    "cost": 97740750,
+    "prereqs": [],
+    "factions": [
+      "CyberSec",
+      "Aevum",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Cranial Signal Processors - Gen I": {
+    "stats": {
+      "hacking_mult": 1.05,
+      "hacking_speed_mult": 1.01
+    },
+    "repreq": 10000,
+    "cost": 912247000,
+    "prereqs": [],
+    "factions": [
+      "CyberSec",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Cranial Signal Processors - Gen II": {
+    "stats": {
+      "hacking_mult": 1.07,
+      "hacking_chance_mult": 1.05,
+      "hacking_speed_mult": 1.02
+    },
+    "repreq": 18750,
+    "cost": 1629012500,
+    "prereqs": [
+      "Cranial Signal Processors - Gen I"
+    ],
+    "factions": [
+      "CyberSec",
+      "NiteSec",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "NeuroFlux Governor": {
+    "stats": {
+      "hacking_mult": 1.01,
+      "strength_mult": 1.01,
+      "defense_mult": 1.01,
+      "dexterity_mult": 1.01,
+      "agility_mult": 1.01,
+      "charisma_mult": 1.01,
+      "hacking_exp_mult": 1.01,
+      "strength_exp_mult": 1.01,
+      "defense_exp_mult": 1.01,
+      "dexterity_exp_mult": 1.01,
+      "agility_exp_mult": 1.01,
+      "charisma_exp_mult": 1.01,
+      "hacking_chance_mult": 1.01,
+      "hacking_speed_mult": 1.01,
+      "hacking_money_mult": 1.01,
+      "hacking_grow_mult": 1.01,
+      "company_rep_mult": 1.01,
+      "faction_rep_mult": 1.01,
+      "crime_money_mult": 1.01,
+      "crime_success_mult": 1.01,
+      "work_money_mult": 1.01,
+      "hacknet_node_money_mult": 1.01,
+      "hacknet_node_purchase_cost_mult": 0.99,
+      "hacknet_node_ram_cost_mult": 0.99,
+      "hacknet_node_core_cost_mult": 0.99,
+      "hacknet_node_level_cost_mult": 0.99
+    },
+    "repreq": 500,
+    "cost": 9774075,
+    "prereqs": [],
+    "factions": [
+      "CyberSec",
+      "Tian Di Hui",
+      "Netburners",
+      "NiteSec",
+      "The Black Hand",
+      "BitRunners",
+      "Sector-12",
+      "Chongqing",
+      "New Tokyo",
+      "Ishima",
+      "Aevum",
+      "Volhaven",
+      "Slum Snakes",
+      "Silhouette",
+      "Speakers for the Dead",
+      "The Dark Army",
+      "The Syndicate",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "ECorp",
+      "MegaCorp",
+      "KuaiGong International",
+      "Four Sigma",
+      "NWO",
+      "Blade Industries",
+      "OmniTek Incorporated",
+      "Bachman & Associates",
+      "Clarke Incorporated",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neurotrainer I": {
+    "stats": {
+      "hacking_exp_mult": 1.1,
+      "strength_exp_mult": 1.1,
+      "defense_exp_mult": 1.1,
+      "dexterity_exp_mult": 1.1,
+      "agility_exp_mult": 1.1,
+      "charisma_exp_mult": 1.1
+    },
+    "repreq": 1000,
+    "cost": 52128400,
+    "prereqs": [],
+    "factions": [
+      "CyberSec",
+      "Aevum",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Nanofiber Weave": {
+    "stats": {
+      "strength_mult": 1.2,
+      "defense_mult": 1.2
+    },
+    "repreq": 37500,
+    "cost": 1629012500,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Dark Army",
+      "The Syndicate",
+      "Blade Industries",
+      "OmniTek Incorporated",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Wired Reflexes": {
+    "stats": {
+      "dexterity_mult": 1.05,
+      "agility_mult": 1.05
+    },
+    "repreq": 1250,
+    "cost": 32580250,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Sector-12",
+      "Ishima",
+      "Aevum",
+      "Volhaven",
+      "Slum Snakes",
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Dark Army",
+      "The Syndicate"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Speech Processor Implant": {
+    "stats": {
+      "charisma_mult": 1.2
+    },
+    "repreq": 7500,
+    "cost": 651605000,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Sector-12",
+      "Chongqing",
+      "New Tokyo",
+      "Ishima",
+      "Aevum",
+      "Volhaven",
+      "Tetrads",
+      "Silhouette"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Nuoptimal Nootropic Injector Implant": {
+    "stats": {
+      "company_rep_mult": 1.2
+    },
+    "repreq": 5000,
+    "cost": 260642000,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Chongqing",
+      "New Tokyo",
+      "Volhaven",
+      "Tetrads",
+      "Four Sigma",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Speech Enhancement": {
+    "stats": {
+      "charisma_mult": 1.1,
+      "company_rep_mult": 1.1
+    },
+    "repreq": 2500,
+    "cost": 162901250,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Tetrads",
+      "Speakers for the Dead",
+      "KuaiGong International",
+      "Four Sigma",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "ADR-V1 Pheromone Gene": {
+    "stats": {
+      "company_rep_mult": 1.1,
+      "faction_rep_mult": 1.1
+    },
+    "repreq": 3750,
+    "cost": 228061750,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Tetrads",
+      "The Syndicate",
+      "MegaCorp",
+      "Four Sigma",
+      "NWO"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Social Negotiation Assistant (S.N.A)": {
+    "stats": {
+      "company_rep_mult": 1.15,
+      "faction_rep_mult": 1.15,
+      "work_money_mult": 1.1
+    },
+    "repreq": 6250,
+    "cost": 390963000,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neuroreceptor Management Implant": {
+    "stats": {},
+    "repreq": 75000,
+    "cost": 7167655000,
+    "prereqs": [],
+    "factions": [
+      "Tian Di Hui",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hacknet Node CPU Architecture Neural-Upload": {
+    "stats": {
+      "hacknet_node_money_mult": 1.15,
+      "hacknet_node_purchase_cost_mult": 0.85
+    },
+    "repreq": 3750,
+    "cost": 143353100,
+    "prereqs": [],
+    "factions": [
+      "Netburners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hacknet Node Cache Architecture Neural-Upload": {
+    "stats": {
+      "hacknet_node_money_mult": 1.1,
+      "hacknet_node_level_cost_mult": 0.85
+    },
+    "repreq": 2500,
+    "cost": 71676550,
+    "prereqs": [],
+    "factions": [
+      "Netburners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hacknet Node NIC Architecture Neural-Upload": {
+    "stats": {
+      "hacknet_node_money_mult": 1.1,
+      "hacknet_node_purchase_cost_mult": 0.9
+    },
+    "repreq": 1875,
+    "cost": 58644450,
+    "prereqs": [],
+    "factions": [
+      "Netburners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hacknet Node Kernel Direct-Neural Interface": {
+    "stats": {
+      "hacknet_node_money_mult": 1.25
+    },
+    "repreq": 7500,
+    "cost": 521284000,
+    "prereqs": [],
+    "factions": [
+      "Netburners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hacknet Node Core Direct-Neural Interface": {
+    "stats": {
+      "hacknet_node_money_mult": 1.45
+    },
+    "repreq": 12500,
+    "cost": 781926000,
+    "prereqs": [],
+    "factions": [
+      "Netburners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Artificial Synaptic Potentiation": {
+    "stats": {
+      "hacking_exp_mult": 1.05,
+      "hacking_chance_mult": 1.05,
+      "hacking_speed_mult": 1.02
+    },
+    "repreq": 6250,
+    "cost": 1042568000,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "The Black Hand",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Neural-Retention Enhancement": {
+    "stats": {
+      "hacking_exp_mult": 1.25
+    },
+    "repreq": 20000,
+    "cost": 3258025000,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "DataJack": {
+    "stats": {
+      "hacking_money_mult": 1.25
+    },
+    "repreq": 112500,
+    "cost": 5864445000,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "The Black Hand",
+      "BitRunners",
+      "Chongqing",
+      "New Tokyo",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Embedded Netburner Module": {
+    "stats": {
+      "hacking_mult": 1.08
+    },
+    "repreq": 15000,
+    "cost": 3258025000,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "The Black Hand",
+      "BitRunners",
+      "Tetrads",
+      "ECorp",
+      "MegaCorp",
+      "NWO",
+      "Blade Industries",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Cranial Signal Processors - Gen III": {
+    "stats": {
+      "hacking_mult": 1.09,
+      "hacking_speed_mult": 1.02,
+      "hacking_money_mult": 1.15
+    },
+    "repreq": 50000,
+    "cost": 7167655000,
+    "prereqs": [
+      "Cranial Signal Processors - Gen II"
+    ],
+    "factions": [
+      "NiteSec",
+      "The Black Hand",
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neurotrainer II": {
+    "stats": {
+      "hacking_exp_mult": 1.15,
+      "strength_exp_mult": 1.15,
+      "defense_exp_mult": 1.15,
+      "dexterity_exp_mult": 1.15,
+      "agility_exp_mult": 1.15,
+      "charisma_exp_mult": 1.15
+    },
+    "repreq": 10000,
+    "cost": 586444500,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "CRTX42-AA Gene Modification": {
+    "stats": {
+      "hacking_mult": 1.08,
+      "hacking_exp_mult": 1.15
+    },
+    "repreq": 45000,
+    "cost": 2932222500,
+    "prereqs": [],
+    "factions": [
+      "NiteSec",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Enhanced Myelin Sheathing": {
+    "stats": {
+      "hacking_mult": 1.08,
+      "hacking_exp_mult": 1.1,
+      "hacking_speed_mult": 1.03
+    },
+    "repreq": 100000,
+    "cost": 17919137500,
+    "prereqs": [],
+    "factions": [
+      "The Black Hand",
+      "BitRunners",
+      "Tetrads",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Embedded Netburner Module Core Implant": {
+    "stats": {
+      "hacking_mult": 1.07,
+      "hacking_exp_mult": 1.07,
+      "hacking_chance_mult": 1.03,
+      "hacking_speed_mult": 1.03,
+      "hacking_money_mult": 1.1
+    },
+    "repreq": 175000,
+    "cost": 32580250000,
+    "prereqs": [
+      "Embedded Netburner Module"
+    ],
+    "factions": [
+      "The Black Hand",
+      "BitRunners",
+      "Tetrads",
+      "ECorp",
+      "MegaCorp",
+      "NWO",
+      "Blade Industries",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Neuralstimulator": {
+    "stats": {
+      "hacking_exp_mult": 1.12,
+      "hacking_chance_mult": 1.1,
+      "hacking_speed_mult": 1.02
+    },
+    "repreq": 50000,
+    "cost": 39096300000,
+    "prereqs": [],
+    "factions": [
+      "The Black Hand",
+      "Sector-12",
+      "Chongqing",
+      "New Tokyo",
+      "Ishima",
+      "Aevum",
+      "Volhaven",
+      "Tetrads",
+      "Four Sigma",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Cranial Signal Processors - Gen IV": {
+    "stats": {
+      "hacking_speed_mult": 1.02,
+      "hacking_money_mult": 1.2,
+      "hacking_grow_mult": 1.25
+    },
+    "repreq": 125000,
+    "cost": 14335310000,
+    "prereqs": [
+      "Cranial Signal Processors - Gen III"
+    ],
+    "factions": [
+      "The Black Hand",
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "The Black Hand": {
+    "stats": {
+      "hacking_mult": 1.1,
+      "strength_mult": 1.15,
+      "dexterity_mult": 1.15,
+      "hacking_speed_mult": 1.02,
+      "hacking_money_mult": 1.1
+    },
+    "repreq": 100000,
+    "cost": 7167655000,
+    "prereqs": [],
+    "factions": [
+      "The Black Hand",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Artificial Bio-neural Network Implant": {
+    "stats": {
+      "hacking_mult": 1.12,
+      "hacking_speed_mult": 1.03,
+      "hacking_money_mult": 1.15
+    },
+    "repreq": 275000,
+    "cost": 39096300000,
+    "prereqs": [],
+    "factions": [
+      "BitRunners",
+      "Tetrads",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Embedded Netburner Module Core V2 Upgrade": {
+    "stats": {
+      "hacking_mult": 1.08,
+      "hacking_exp_mult": 1.15,
+      "hacking_chance_mult": 1.05,
+      "hacking_speed_mult": 1.05,
+      "hacking_money_mult": 1.3
+    },
+    "repreq": 1000000,
+    "cost": 58644450000,
+    "prereqs": [
+      "Embedded Netburner Module Core Implant"
+    ],
+    "factions": [
+      "BitRunners",
+      "Tetrads",
+      "ECorp",
+      "MegaCorp",
+      "KuaiGong International",
+      "NWO",
+      "Blade Industries",
+      "OmniTek Incorporated",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": true
+  },
+  "Neural Accelerator": {
+    "stats": {
+      "hacking_mult": 1.1,
+      "hacking_exp_mult": 1.15,
+      "hacking_money_mult": 1.2
+    },
+    "repreq": 200000,
+    "cost": 22806175000,
+    "prereqs": [],
+    "factions": [
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Cranial Signal Processors - Gen V": {
+    "stats": {
+      "hacking_mult": 1.3,
+      "hacking_money_mult": 1.25,
+      "hacking_grow_mult": 1.75
+    },
+    "repreq": 250000,
+    "cost": 29322225000,
+    "prereqs": [
+      "Cranial Signal Processors - Gen IV"
+    ],
+    "factions": [
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BitRunners Neurolink": {
+    "stats": {
+      "hacking_mult": 1.15,
+      "hacking_exp_mult": 1.2,
+      "hacking_chance_mult": 1.1,
+      "hacking_speed_mult": 1.05
+    },
+    "repreq": 875000,
+    "cost": 57015437500,
+    "prereqs": [],
+    "factions": [
+      "BitRunners",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Augmented Targeting I": {
+    "stats": {
+      "dexterity_mult": 1.1
+    },
+    "repreq": 5000,
+    "cost": 195481500,
+    "prereqs": [],
+    "factions": [
+      "Sector-12",
+      "Ishima",
+      "Slum Snakes",
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Augmented Targeting II": {
+    "stats": {
+      "dexterity_mult": 1.2
+    },
+    "repreq": 8750,
+    "cost": 553864250,
+    "prereqs": [
+      "Augmented Targeting I"
+    ],
+    "factions": [
+      "Sector-12",
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "CashRoot Starter Kit": {
+    "stats": {},
+    "repreq": 12500,
+    "cost": 1629012500,
+    "prereqs": [],
+    "factions": [
+      "Sector-12",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neuregen Gene Modification": {
+    "stats": {
+      "hacking_exp_mult": 1.4
+    },
+    "repreq": 37500,
+    "cost": 4887037500,
+    "prereqs": [],
+    "factions": [
+      "Chongqing",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "NutriGen Implant": {
+    "stats": {
+      "strength_exp_mult": 1.2,
+      "defense_exp_mult": 1.2,
+      "dexterity_exp_mult": 1.2,
+      "agility_exp_mult": 1.2
+    },
+    "repreq": 6250,
+    "cost": 32580250,
+    "prereqs": [],
+    "factions": [
+      "New Tokyo",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Combat Rib I": {
+    "stats": {
+      "strength_mult": 1.1,
+      "defense_mult": 1.1
+    },
+    "repreq": 7500,
+    "cost": 309512375,
+    "prereqs": [],
+    "factions": [
+      "Ishima",
+      "Volhaven",
+      "Slum Snakes",
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "INFRARET Enhancement": {
+    "stats": {
+      "dexterity_mult": 1.1,
+      "crime_money_mult": 1.1,
+      "crime_success_mult": 1.25
+    },
+    "repreq": 7500,
+    "cost": 390963000,
+    "prereqs": [],
+    "factions": [
+      "Ishima",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "PCMatrix": {
+    "stats": {
+      "charisma_mult": 1.0777,
+      "charisma_exp_mult": 1.0777,
+      "company_rep_mult": 1.0777,
+      "faction_rep_mult": 1.0777,
+      "crime_money_mult": 1.0777,
+      "crime_success_mult": 1.0777,
+      "work_money_mult": 1.777
+    },
+    "repreq": 100000,
+    "cost": 26064200000,
+    "prereqs": [],
+    "factions": [
+      "Aevum",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Combat Rib II": {
+    "stats": {
+      "strength_mult": 1.14,
+      "defense_mult": 1.14
+    },
+    "repreq": 18750,
+    "cost": 847086500,
+    "prereqs": [
+      "Combat Rib I"
+    ],
+    "factions": [
+      "Volhaven",
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "DermaForce Particle Barrier": {
+    "stats": {
+      "defense_mult": 1.4
+    },
+    "repreq": 15000,
+    "cost": 651605000,
+    "prereqs": [],
+    "factions": [
+      "Volhaven",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "LuminCloaking-V1 Skin Implant": {
+    "stats": {
+      "agility_mult": 1.05,
+      "crime_money_mult": 1.1
+    },
+    "repreq": 1500,
+    "cost": 65160500,
+    "prereqs": [],
+    "factions": [
+      "Slum Snakes",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "LuminCloaking-V2 Skin Implant": {
+    "stats": {
+      "defense_mult": 1.1,
+      "agility_mult": 1.1,
+      "crime_money_mult": 1.25
+    },
+    "repreq": 5000,
+    "cost": 390963000,
+    "prereqs": [
+      "LuminCloaking-V1 Skin Implant"
+    ],
+    "factions": [
+      "Slum Snakes",
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "SmartSonar Implant": {
+    "stats": {
+      "dexterity_mult": 1.1,
+      "dexterity_exp_mult": 1.15,
+      "crime_money_mult": 1.25
+    },
+    "repreq": 22500,
+    "cost": 977407500,
+    "prereqs": [],
+    "factions": [
+      "Slum Snakes",
+      "Tetrads"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Unstable Circadian Modulator": {
+    "stats": {
+      "hacking_mult": 1.15,
+      "hacking_exp_mult": 2
+    },
+    "repreq": 362500,
+    "cost": 65160500000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead"
+    ],
+    "owned": false,
+    "pending": true
+  },
+  "HemoRecirculator": {
+    "stats": {
+      "strength_mult": 1.08,
+      "defense_mult": 1.08,
+      "dexterity_mult": 1.08,
+      "agility_mult": 1.08
+    },
+    "repreq": 10000,
+    "cost": 586444500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Augmented Targeting III": {
+    "stats": {
+      "dexterity_mult": 1.3
+    },
+    "repreq": 27500,
+    "cost": 1498691500,
+    "prereqs": [
+      "Augmented Targeting II"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "The Covenant",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Synthetic Heart": {
+    "stats": {
+      "strength_mult": 1.5,
+      "agility_mult": 1.5
+    },
+    "repreq": 750000,
+    "cost": 37467287500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "KuaiGong International",
+      "NWO",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Synfibril Muscle": {
+    "stats": {
+      "strength_mult": 1.3,
+      "defense_mult": 1.3
+    },
+    "repreq": 437500,
+    "cost": 14661112500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "KuaiGong International",
+      "NWO",
+      "Blade Industries",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Combat Rib III": {
+    "stats": {
+      "strength_mult": 1.18,
+      "defense_mult": 1.18
+    },
+    "repreq": 35000,
+    "cost": 1563852000,
+    "prereqs": [
+      "Combat Rib II"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "The Covenant",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "NEMEAN Subdermal Weave": {
+    "stats": {
+      "defense_mult": 2.2
+    },
+    "repreq": 875000,
+    "cost": 42354325000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Syndicate",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Graphene Bone Lacings": {
+    "stats": {
+      "strength_mult": 1.7,
+      "defense_mult": 1.7
+    },
+    "repreq": 1125000,
+    "cost": 55386425000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Covenant",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Bionic Spine": {
+    "stats": {
+      "strength_mult": 1.15,
+      "defense_mult": 1.15,
+      "dexterity_mult": 1.15,
+      "agility_mult": 1.15
+    },
+    "repreq": 45000,
+    "cost": 1629012500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Graphene Bionic Spine Upgrade": {
+    "stats": {
+      "strength_mult": 1.6,
+      "defense_mult": 1.6,
+      "dexterity_mult": 1.6,
+      "agility_mult": 1.6
+    },
+    "repreq": 1625000,
+    "cost": 78192600000,
+    "prereqs": [
+      "Bionic Spine"
+    ],
+    "factions": [
+      "Tetrads",
+      "ECorp",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Bionic Legs": {
+    "stats": {
+      "agility_mult": 1.6
+    },
+    "repreq": 150000,
+    "cost": 4887037500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Syndicate",
+      "KuaiGong International",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Graphene Bionic Legs Upgrade": {
+    "stats": {
+      "agility_mult": 2.5
+    },
+    "repreq": 750000,
+    "cost": 58644450000,
+    "prereqs": [
+      "Bionic Legs"
+    ],
+    "factions": [
+      "Tetrads",
+      "ECorp",
+      "MegaCorp",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "TITN-41 Gene-Modification Injection": {
+    "stats": {
+      "charisma_mult": 1.15,
+      "charisma_exp_mult": 1.15
+    },
+    "repreq": 25000,
+    "cost": 2476099000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Silhouette"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Enhanced Social Interaction Implant": {
+    "stats": {
+      "charisma_mult": 1.6,
+      "charisma_exp_mult": 1.6
+    },
+    "repreq": 375000,
+    "cost": 17919137500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Four Sigma",
+      "NWO",
+      "OmniTek Incorporated",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Embedded Netburner Module Core V3 Upgrade": {
+    "stats": {
+      "hacking_mult": 1.1,
+      "hacking_exp_mult": 1.25,
+      "hacking_chance_mult": 1.1,
+      "hacking_speed_mult": 1.05,
+      "hacking_money_mult": 1.4
+    },
+    "repreq": 1750000,
+    "cost": 97740750000,
+    "prereqs": [
+      "Embedded Netburner Module Core V2 Upgrade"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "ECorp",
+      "MegaCorp",
+      "NWO",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": true
+  },
+  "Embedded Netburner Module Analyze Engine": {
+    "stats": {
+      "hacking_speed_mult": 1.1
+    },
+    "repreq": 625000,
+    "cost": 78192600000,
+    "prereqs": [
+      "Embedded Netburner Module"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "ECorp",
+      "MegaCorp",
+      "NWO",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Embedded Netburner Module Direct Memory Access Upgrade": {
+    "stats": {
+      "hacking_chance_mult": 1.2,
+      "hacking_money_mult": 1.4
+    },
+    "repreq": 1000000,
+    "cost": 91224700000,
+    "prereqs": [
+      "Embedded Netburner Module"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Covenant",
+      "Daedalus",
+      "Illuminati",
+      "ECorp",
+      "MegaCorp",
+      "NWO",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neuronal Densification": {
+    "stats": {
+      "hacking_mult": 1.15,
+      "hacking_exp_mult": 1.1,
+      "hacking_speed_mult": 1.03
+    },
+    "repreq": 187500,
+    "cost": 17919137500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Clarke Incorporated"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "FocusWire": {
+    "stats": {
+      "hacking_exp_mult": 1.05,
+      "strength_exp_mult": 1.05,
+      "defense_exp_mult": 1.05,
+      "dexterity_exp_mult": 1.05,
+      "agility_exp_mult": 1.05,
+      "charisma_exp_mult": 1.05,
+      "company_rep_mult": 1.1,
+      "work_money_mult": 1.2
+    },
+    "repreq": 75000,
+    "cost": 11728890000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "KuaiGong International",
+      "Four Sigma",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "PC Direct-Neural Interface": {
+    "stats": {
+      "hacking_mult": 1.08,
+      "company_rep_mult": 1.3
+    },
+    "repreq": 375000,
+    "cost": 48870375000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "ECorp",
+      "Four Sigma",
+      "Blade Industries",
+      "OmniTek Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "PC Direct-Neural Interface Optimization Submodule": {
+    "stats": {
+      "hacking_mult": 1.1,
+      "company_rep_mult": 1.75
+    },
+    "repreq": 500000,
+    "cost": 58644450000,
+    "prereqs": [
+      "PC Direct-Neural Interface"
+    ],
+    "factions": [
+      "Tetrads",
+      "ECorp",
+      "Blade Industries",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "PC Direct-Neural Interface NeuroNet Injector": {
+    "stats": {
+      "hacking_mult": 1.1,
+      "hacking_speed_mult": 1.05,
+      "company_rep_mult": 2
+    },
+    "repreq": 1500000,
+    "cost": 97740750000,
+    "prereqs": [
+      "PC Direct-Neural Interface"
+    ],
+    "factions": [
+      "Tetrads",
+      "Fulcrum Secret Technologies"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "ADR-V2 Pheromone Gene": {
+    "stats": {
+      "company_rep_mult": 1.2,
+      "faction_rep_mult": 1.2
+    },
+    "repreq": 62500,
+    "cost": 7167655000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Silhouette",
+      "Four Sigma",
+      "Bachman & Associates",
+      "Clarke Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "The Shadow's Simulacrum": {
+    "stats": {
+      "company_rep_mult": 1.15,
+      "faction_rep_mult": 1.15
+    },
+    "repreq": 37500,
+    "cost": 5212840000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead",
+      "The Dark Army",
+      "The Syndicate"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neurotrainer III": {
+    "stats": {
+      "hacking_exp_mult": 1.2,
+      "strength_exp_mult": 1.2,
+      "defense_exp_mult": 1.2,
+      "dexterity_exp_mult": 1.2,
+      "agility_exp_mult": 1.2,
+      "charisma_exp_mult": 1.2
+    },
+    "repreq": 25000,
+    "cost": 1694173000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Four Sigma",
+      "NWO"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "HyperSight Corneal Implant": {
+    "stats": {
+      "dexterity_mult": 1.4,
+      "hacking_speed_mult": 1.03,
+      "hacking_money_mult": 1.1
+    },
+    "repreq": 150000,
+    "cost": 35838275000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "KuaiGong International",
+      "Blade Industries"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Power Recirculation Core": {
+    "stats": {
+      "hacking_mult": 1.05,
+      "strength_mult": 1.05,
+      "defense_mult": 1.05,
+      "dexterity_mult": 1.05,
+      "agility_mult": 1.05,
+      "charisma_mult": 1.05,
+      "hacking_exp_mult": 1.1,
+      "strength_exp_mult": 1.1,
+      "defense_exp_mult": 1.1,
+      "dexterity_exp_mult": 1.1,
+      "agility_exp_mult": 1.1,
+      "charisma_exp_mult": 1.1
+    },
+    "repreq": 25000,
+    "cost": 2345778000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Dark Army",
+      "The Syndicate",
+      "NWO"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "QLink": {
+    "stats": {
+      "hacking_mult": 1.75,
+      "hacking_chance_mult": 2.5,
+      "hacking_speed_mult": 2,
+      "hacking_money_mult": 4
+    },
+    "repreq": 1875000,
+    "cost": 325802500000000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Illuminati"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "SPTN-97 Gene Modification": {
+    "stats": {
+      "hacking_mult": 1.15,
+      "strength_mult": 1.75,
+      "defense_mult": 1.75,
+      "dexterity_mult": 1.75,
+      "agility_mult": 1.75
+    },
+    "repreq": 1250000,
+    "cost": 63531487500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Covenant"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "ECorp HVMind Implant": {
+    "stats": {
+      "hacking_grow_mult": 3
+    },
+    "repreq": 1500000,
+    "cost": 71676550000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "ECorp"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "CordiARC Fusion Reactor": {
+    "stats": {
+      "strength_mult": 1.35,
+      "defense_mult": 1.35,
+      "dexterity_mult": 1.35,
+      "agility_mult": 1.35,
+      "strength_exp_mult": 1.35,
+      "defense_exp_mult": 1.35,
+      "dexterity_exp_mult": 1.35,
+      "agility_exp_mult": 1.35
+    },
+    "repreq": 1125000,
+    "cost": 65160500000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "MegaCorp"
+    ],
+    "owned": false,
+    "pending": true
+  },
+  "SmartJaw": {
+    "stats": {
+      "charisma_mult": 1.5,
+      "charisma_exp_mult": 1.5,
+      "company_rep_mult": 1.25,
+      "faction_rep_mult": 1.25
+    },
+    "repreq": 375000,
+    "cost": 35838275000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Bachman & Associates"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Neotra": {
+    "stats": {
+      "strength_mult": 1.55,
+      "defense_mult": 1.55
+    },
+    "repreq": 562500,
+    "cost": 37467287500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Blade Industries"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Xanipher": {
+    "stats": {
+      "hacking_mult": 1.2,
+      "strength_mult": 1.2,
+      "defense_mult": 1.2,
+      "dexterity_mult": 1.2,
+      "agility_mult": 1.2,
+      "charisma_mult": 1.2,
+      "hacking_exp_mult": 1.15,
+      "strength_exp_mult": 1.15,
+      "defense_exp_mult": 1.15,
+      "dexterity_exp_mult": 1.15,
+      "agility_exp_mult": 1.15,
+      "charisma_exp_mult": 1.15
+    },
+    "repreq": 875000,
+    "cost": 55386425000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "NWO"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Hydroflame Left Arm": {
+    "stats": {
+      "strength_mult": 2.7
+    },
+    "repreq": 1250000,
+    "cost": 32580250000000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "NWO"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "nextSENS Gene Modification": {
+    "stats": {
+      "hacking_mult": 1.2,
+      "strength_mult": 1.2,
+      "defense_mult": 1.2,
+      "dexterity_mult": 1.2,
+      "agility_mult": 1.2,
+      "charisma_mult": 1.2
+    },
+    "repreq": 437500,
+    "cost": 25086792500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "Clarke Incorporated"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "OmniTek InfoLoad": {
+    "stats": {
+      "hacking_mult": 1.2,
+      "hacking_exp_mult": 1.25
+    },
+    "repreq": 625000,
+    "cost": 37467287500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "OmniTek Incorporated"
+    ],
+    "owned": true,
+    "pending": false
+  },
+  "Photosynthetic Cells": {
+    "stats": {
+      "strength_mult": 1.4,
+      "defense_mult": 1.4,
+      "agility_mult": 1.4
+    },
+    "repreq": 562500,
+    "cost": 35838275000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "KuaiGong International"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Graphene BrachiBlades Upgrade": {
+    "stats": {
+      "strength_mult": 1.4,
+      "defense_mult": 1.4,
+      "crime_money_mult": 1.3,
+      "crime_success_mult": 1.1
+    },
+    "repreq": 225000,
+    "cost": 32580250000,
+    "prereqs": [
+      "BrachiBlades"
+    ],
+    "factions": [
+      "Tetrads",
+      "Speakers for the Dead"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Graphene Bionic Arms Upgrade": {
+    "stats": {
+      "strength_mult": 1.85,
+      "dexterity_mult": 1.85
+    },
+    "repreq": 500000,
+    "cost": 48870375000,
+    "prereqs": [
+      "Bionic Arms"
+    ],
+    "factions": [
+      "Tetrads",
+      "The Dark Army"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BrachiBlades": {
+    "stats": {
+      "strength_mult": 1.15,
+      "defense_mult": 1.15,
+      "crime_money_mult": 1.15,
+      "crime_success_mult": 1.1
+    },
+    "repreq": 12500,
+    "cost": 1172889000,
+    "prereqs": [],
+    "factions": [
+      "Tetrads",
+      "The Syndicate"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Bionic Arms": {
+    "stats": {
+      "strength_mult": 1.3,
+      "dexterity_mult": 1.3
+    },
+    "repreq": 62500,
+    "cost": 3583827500,
+    "prereqs": [],
+    "factions": [
+      "Tetrads"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "The Red Pill": {
+    "stats": {},
+    "repreq": 2500000,
+    "cost": 0,
+    "prereqs": [],
+    "factions": [
+      "Daedalus"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "EsperTech Bladeburner Eyewear": {
+    "stats": {
+      "dexterity_mult": 1.05,
+      "bladeburner_success_chance_mult": 1.03
+    },
+    "repreq": 1250,
+    "cost": 2150296500,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "EMS-4 Recombination": {
+    "stats": {
+      "bladeburner_stamina_gain_mult": 1.02,
+      "bladeburner_analysis_mult": 1.05,
+      "bladeburner_success_chance_mult": 1.03
+    },
+    "repreq": 2500,
+    "cost": 3583827500,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "ORION-MKIV Shoulder": {
+    "stats": {
+      "strength_mult": 1.05,
+      "defense_mult": 1.05,
+      "dexterity_mult": 1.05,
+      "bladeburner_success_chance_mult": 1.04
+    },
+    "repreq": 6250,
+    "cost": 7167655000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hyperion Plasma Cannon V1": {
+    "stats": {
+      "bladeburner_success_chance_mult": 1.06
+    },
+    "repreq": 12500,
+    "cost": 35838275000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Hyperion Plasma Cannon V2": {
+    "stats": {
+      "bladeburner_success_chance_mult": 1.08
+    },
+    "repreq": 25000,
+    "cost": 71676550000,
+    "prereqs": [
+      "Hyperion Plasma Cannon V1"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "GOLEM Serum": {
+    "stats": {
+      "strength_mult": 1.07,
+      "defense_mult": 1.07,
+      "dexterity_mult": 1.07,
+      "agility_mult": 1.07,
+      "bladeburner_stamina_gain_mult": 1.05
+    },
+    "repreq": 31250,
+    "cost": 143353100000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Vangelis Virus": {
+    "stats": {
+      "dexterity_exp_mult": 1.1,
+      "bladeburner_analysis_mult": 1.1,
+      "bladeburner_success_chance_mult": 1.04
+    },
+    "repreq": 18750,
+    "cost": 35838275000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Vangelis Virus 3.0": {
+    "stats": {
+      "defense_exp_mult": 1.1,
+      "dexterity_exp_mult": 1.1,
+      "bladeburner_analysis_mult": 1.15,
+      "bladeburner_success_chance_mult": 1.05
+    },
+    "repreq": 37500,
+    "cost": 143353100000,
+    "prereqs": [
+      "Vangelis Virus"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "I.N.T.E.R.L.I.N.K.E.D": {
+    "stats": {
+      "strength_exp_mult": 1.05,
+      "defense_exp_mult": 1.05,
+      "dexterity_exp_mult": 1.05,
+      "agility_exp_mult": 1.05,
+      "bladeburner_max_stamina_mult": 1.1
+    },
+    "repreq": 25000,
+    "cost": 71676550000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "Blade's Runners": {
+    "stats": {
+      "agility_mult": 1.05,
+      "bladeburner_max_stamina_mult": 1.05,
+      "bladeburner_stamina_gain_mult": 1.05
+    },
+    "repreq": 20000,
+    "cost": 107514825000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor": {
+    "stats": {
+      "strength_mult": 1.04,
+      "defense_mult": 1.04,
+      "dexterity_mult": 1.04,
+      "agility_mult": 1.04,
+      "bladeburner_stamina_gain_mult": 1.02,
+      "bladeburner_success_chance_mult": 1.03
+    },
+    "repreq": 12500,
+    "cost": 17919137500,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor: Power Cells Upgrade": {
+    "stats": {
+      "bladeburner_max_stamina_mult": 1.05,
+      "bladeburner_stamina_gain_mult": 1.02,
+      "bladeburner_success_chance_mult": 1.05
+    },
+    "repreq": 18750,
+    "cost": 35838275000,
+    "prereqs": [
+      "BLADE-51b Tesla Armor"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor: Energy Shielding Upgrade": {
+    "stats": {
+      "defense_mult": 1.05,
+      "bladeburner_success_chance_mult": 1.06
+    },
+    "repreq": 21250,
+    "cost": 71676550000,
+    "prereqs": [
+      "BLADE-51b Tesla Armor"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor: Unibeam Upgrade": {
+    "stats": {
+      "bladeburner_success_chance_mult": 1.08
+    },
+    "repreq": 31250,
+    "cost": 215029650000,
+    "prereqs": [
+      "BLADE-51b Tesla Armor"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor: Omnibeam Upgrade": {
+    "stats": {
+      "bladeburner_success_chance_mult": 1.1
+    },
+    "repreq": 62500,
+    "cost": 358382750000,
+    "prereqs": [
+      "BLADE-51b Tesla Armor: Unibeam Upgrade"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "BLADE-51b Tesla Armor: IPU Upgrade": {
+    "stats": {
+      "bladeburner_analysis_mult": 1.15,
+      "bladeburner_success_chance_mult": 1.02
+    },
+    "repreq": 15000,
+    "cost": 14335310000,
+    "prereqs": [
+      "BLADE-51b Tesla Armor"
+    ],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  },
+  "The Blade's Simulacrum": {
+    "stats": {},
+    "repreq": 1250,
+    "cost": 1954815000000,
+    "prereqs": [],
+    "factions": [
+      "Bladeburners"
+    ],
+    "owned": false,
+    "pending": false
+  }
+}

@@ -1,4 +1,3 @@
-/** @param {NS} ns **/
 const TASK_TRAIN = 'Train Combat';
 const TASK_WANTED = 'Vigilante Justice';
 const TASK_NOOB = 'Mug People';
@@ -28,8 +27,18 @@ const WARFARE_TRESHOLD = 2;
 
 const SLEEP_TIME = 10000;
 
+/** @param {NS} ns **/
 export async function main(ns) {
 	const gang = ns.gang;
+
+	while (!gang.inGang()) {
+		if (ns.heart.break() < -54000 && ns.getPlayer().factions.includes('Tetrads')) {
+			gang.createGang('Tetrads');
+		} else {
+			await ns.sleep(SLEEP_TIME);
+		}
+	}
+
 	const autoTasks = {}; // Store info about automated tasks
 	let defaultTask = null;
 	if (ns.args[0] && gang.getTaskNames().includes(ns.args[0])) {
@@ -78,6 +87,18 @@ export async function main(ns) {
 		}
 		return 'FoundaBug';
 	}
+
+	while (!ns.gang.inGang()) {
+		let jump = false;
+		if (ns.heart.break() < -54000)
+			jump = ns.gang.createGang('Tetrads');
+		if (!jump)
+			await ns.sleep(5000);
+		else
+			ns.tprint('Gang founded!');
+	}
+
+	ns.kill('crime-it-up.js', 'home');
 
 	// Main loop
 	let keepGoing = true;

@@ -1,4 +1,4 @@
-import { formatMoney, formatNumberShort } from './utils/formats.js';
+import { formatMoney, formatNumberShort, formatDuration } from './utils/formats.js';
 //import {NS} from './';
 
 // Names
@@ -97,7 +97,7 @@ const SETTING_EARLY_UPGRADE_CAP = 0.10; // Money ratio before min
 const SETTING_LATE_WILSON_CAP = 0.05;
 const SETTING_LATE_UPGRADE_CAP = 0.025;
 const SETTING_AD_CAP = 0.05;
-const SETTING_PRODUCT_CAP = 0.20;
+const SETTING_PRODUCT_CAP = 0.50;
 const SETTING_SIZE_CAP = 0.20;
 const SETTING_WAREHOUSE_CAP = 0.05;
 const SETTING_WAREHOUSE_MIN = 3000;
@@ -166,6 +166,7 @@ export async function main(ns) {
       ns.print('Corp Established');
       break;
     }
+    ns.print(`Not enough money to start corp, sleeping for ${formatDuration(SLOW_INTERVAL)}`);
     await ns.sleep(SLOW_INTERVAL);
   }
 
@@ -211,15 +212,15 @@ export async function main(ns) {
     await updateMaterials(ns, FIRST_DIVISION, city, SETTING_FIRST_MATERIALS);
   }
 
-  // Now wait for employee stats to improve
-  ns.print(`Waiting for Morale to improve to at least ${SETTING_MORALE_MIN}`);
-  while (minimumMorale(ns, FIRST_DIVISION) < SETTING_MORALE_MIN) await ns.sleep(10000);
-
   ns.print("*** Time to find investors!");
   offer = corporation.getInvestmentOffer();
   if (offer.round > 1) {
     ns.print('Looks like we already accepted an offer');
   } else {
+    // Now wait for employee stats to improve
+    ns.print(`Waiting for Morale to improve to at least ${SETTING_MORALE_MIN}`);
+    while (minimumMorale(ns, FIRST_DIVISION) < SETTING_MORALE_MIN) await ns.sleep(10000);
+    
     let offer = corporation.getInvestmentOffer();
     ns.print(`Starting offer: ${ formatMoney(offer.funds) }`)
     // For the first offer, we want at least $100b
@@ -232,7 +233,7 @@ export async function main(ns) {
       await ns.sleep(10000);
       counter++;
     }
-    ns.print(`Accepting investment offer for $${ formatMoney(offer.funds) }!`);
+    ns.print(`Accepting investment offer for ${ formatMoney(offer.funds) }!`);
     corporation.acceptInvestmentOffer();
   }
 
@@ -252,19 +253,20 @@ export async function main(ns) {
   while (corporation.getUpgradeLevel(UPGRADE_SMART_STORAGE) < SETTING_SMART_FIRST_LEVEL ||
   corporation.getUpgradeLevel(UPGRADE_SMART_FACTORIES) < SETTING_SMART_FIRST_LEVEL) {
     let upgradeList = [UPGRADE_SMART_FACTORIES, UPGRADE_SMART_STORAGE];
+    upgradeList = upgradeList.filter(upg => corporation.getUpgradeLevel(upg) < SETTING_SMART_FIRST_LEVEL);
     for (const upgrade of upgradeList) {
       for (let i = 1; i <= SETTING_SMART_FIRST_LEVEL - corporation.getUpgradeLevel(upgrade); i++) {
-        corporation.levelUpgrade(upgrade);
+        if (corporation.getCorporation().funds >= corporation.getUpgradeLevelCost(upgrade))
+          corporation.levelUpgrade(upgrade);
       }
       if (corporation.getUpgradeLevel(upgrade) === SETTING_SMART_FIRST_LEVEL) {
         ns.print(`${ upgrade } is now level ${ corporation.getUpgradeLevel(upgrade) }`);
-        upgradeList = upgradeList.filter(upg => upg !== upgrade);
       } else {
         ns.print(`${upgrade} not fully upgraded. Sleeping.`);
       }
     }
     if (upgradeList.length)
-      await ns.sleep(5000);
+      await ns.sleep(SLOW_INTERVAL);
   }
 
   ns.print("Upgrading the warehouses to 2000");
@@ -295,7 +297,7 @@ export async function main(ns) {
       await ns.sleep(10000);
       counter++;
     }
-    ns.print(`Accepting investment offer for $${formatMoney(offer.funds)}!`);
+    ns.print(`Accepting investment offer for ${formatMoney(offer.funds)}!`);
     corporation.acceptInvestmentOffer();
   }
 
@@ -329,6 +331,12 @@ export async function main(ns) {
   // Accept another bunch of money. Possibly a bad deal
   // ns.corporation.acceptInvestmentOffer();
 
+  // Make Hacknet focus on research
+  if (ns.isRunning('hacknet-manager.js', 'home'))
+    ns.kill('hacknet-manager.js', 'home');
+  if (!ns.isRunning('hacknet-manager', 'home', '--focus', 'research'))
+    ns.exec('hacknet-manager.js', 'home', 1, '--focus', 'research');
+
   // Just go public. not selling stock so why wait?
   if (ns.corporation.goPublic(0)) {
     ns.print("🎉🎉🎉 WE HAVE IPO!!!");
@@ -354,7 +362,7 @@ export async function main(ns) {
  * @param {string} city
  * @param {object} positions
  * @returns {void}
- **/
+**/
 const assignJobs = async (ns, employees, division, city, positions, output = true) => {
   ns.print(`Assigning ${employees.length} employees to jobs in ${city}.`);
   if (output) ns.print((Object.keys(positions).map(key => `${key}: ${positions[key]}`).join(' ')));
@@ -394,7 +402,7 @@ const prodScore = (employee, position) => {
  * @param {NS} ns
  * @param {string} division
  * @returns {number}
- **/
+**/
 export const minimumMorale = (ns, division) => {
   return Math.min( // Turn cities into employees and reduce to find the lowest morale in each city then min that. huzzah
     ...CITIES.map(city => ns.corporation.getOffice(division, city).employees.reduce((prev, employee) => Math.min(ns.corporation.getEmployee(division, city, employee).mor, prev), 100))
@@ -408,7 +416,7 @@ export const minimumMorale = (ns, division) => {
  * @param {string} material
  * @param {number} desired
  * @returns {number}
- **/
+**/
 const matsPerTick = (ns, division, city, material, desired) => ((desired - ns.corporation.getMaterial(division, city, material).qty) / 10);
 
 /**
@@ -417,7 +425,7 @@ const matsPerTick = (ns, division, city, material, desired) => ((desired - ns.co
  * @param {string} city
  * @param {object} materialSetting
  * @returns {boolean}
- **/
+**/
 const matsAtLevel = (ns, division, city, materialSetting) => {
   return (ns.corporation.getMaterial(division, city, MATERIAL_HARDWARE).qty >= materialSetting[MATERIAL_HARDWARE]) &&
     (ns.corporation.getMaterial(division, city, MATERIAL_ROBOTS).qty >= materialSetting[MATERIAL_ROBOTS]) &&
@@ -432,7 +440,7 @@ const matsAtLevel = (ns, division, city, materialSetting) => {
  * @param {object} settings
  **/
 const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTRY_SETTINGS) => {
-  while (!ns.corporation.getDivision(division)) {
+  while (!ns.corporation.getCorporation().divisions.find(div => div.name === division)) {
     ns.print('Creating Industry');
     ns.corporation.expandIndustry(industry, division);
     if (ns.corporation.getDivision(division))
@@ -497,7 +505,7 @@ const updateDivision = async (ns, industry, division, settings = DEFAULT_INDUSTR
 
     // Upgrade warehouse to settings.warehouse
     if (ns.corporation.getWarehouse(division, city).size < settings.warehouse) {
-      ns.print(`Upgrading the warehouse to ${settings.warehouse}`);
+      ns.print(`Upgrading the ${division} warehouse in ${city} to ${settings.warehouse}`);
       while (ns.corporation.getWarehouse(division, city).size < settings.warehouse) {
         if (ns.corporation.getCorporation().funds >= ns.corporation.getUpgradeWarehouseCost(division, city))
           ns.corporation.upgradeWarehouse(division, city);
@@ -533,6 +541,12 @@ const updateMaterials = async (ns, division, city, materials) => {
     ns.corporation.buyMaterial(
       division,
       city,
+      MATERIAL_ROBOTS,
+      matsPerTick(ns, division, city, MATERIAL_ROBOTS, materials[MATERIAL_ROBOTS])
+    );
+    ns.corporation.buyMaterial(
+      division,
+      city,
       MATERIAL_AI_CORES,
       matsPerTick(ns, division, city, MATERIAL_AI_CORES, materials[MATERIAL_AI_CORES])
     );
@@ -544,12 +558,16 @@ const updateMaterials = async (ns, division, city, materials) => {
     );
     // Wait for a tick - can't use 10 seconds becaue bonus times breaks the timing
     if (counter % 200 === 0) // 200 loops should be ~10 seconds
-      ns.print(`Currently ${ns.corporation.getMaterial(FIRST_DIVISION, city, MATERIAL_HARDWARE).qty} hardware in ${city}`);
+      ns.print(`Currently ${ns.corporation.getMaterial(FIRST_DIVISION, city, MATERIAL_HARDWARE).qty} hardware ` +
+      `${ns.corporation.getMaterial(FIRST_DIVISION, city, MATERIAL_ROBOTS).qty} robots ` +
+      `${ns.corporation.getMaterial(FIRST_DIVISION, city, MATERIAL_AI_CORES).qty} AI cores ` +
+      `${ns.corporation.getMaterial(FIRST_DIVISION, city, MATERIAL_REAL_ESTATE).qty} real estate in ${city}`);
     counter++;
     await ns.sleep(50);
   }
   ns.print("Setting materials back down to 0 purchasing");
   ns.corporation.buyMaterial(division, city, MATERIAL_HARDWARE, 0);
+  ns.corporation.buyMaterial(division, city, MATERIAL_ROBOTS, 0);
   ns.corporation.buyMaterial(division, city, MATERIAL_AI_CORES, 0);
   ns.corporation.buyMaterial(division, city, MATERIAL_REAL_ESTATE, 0);
 }
@@ -602,10 +620,10 @@ async function discontinueWeakestProduct(ns, division) {
 }
 
 /**
- * @param {NS} ns
+ * @param {NS} ns 
  * @param {string} industry
- * @param {string} division
- * @param {boolean} output
+ * @param {string} division 
+ * @param {boolean} output 
  * @returns {Promise<void>}
  */
 const productLoop = async (ns, industry, division, output) => {
@@ -640,7 +658,7 @@ const productLoop = async (ns, industry, division, output) => {
   if (adFunds > adCost) {
     ns.print(`Hiring AdVert for ${formatMoney(ns.corporation.getHireAdVertCost(division))}`);
     ns.corporation.hireAdVert(division);
-  } else if (output)
+  } else if (output) 
     ns.print(`Current Ad Funds: $${formatMoney(adFunds)} Ad Cost: $${formatMoney(adCost)}`);
 
   // Check all upgrades against money
@@ -656,7 +674,7 @@ const productLoop = async (ns, industry, division, output) => {
   let size = {
     max: 0
   }; // will contain cities as keys with office sizes and max as largest non-aevum size
-  CITIES.forEach(city => {
+  CITIES.forEach(city => { 
     let officeSize = ns.corporation.getOffice(division, city).size;
     size[city] = officeSize;
     if (city !== CITY_AEVUM && officeSize > size.max)
@@ -671,8 +689,8 @@ const productLoop = async (ns, industry, division, output) => {
       (city === CITY_AEVUM && size[city] <= size.max + 15) || // Aevum and others have caught up
       (size[city] < size.max || size[city] < size[CITY_AEVUM] - 15) && // Others and not caught up
       expansionBudget >= ns.corporation.getOfficeSizeUpgradeCost(division, city, 15)) {
-      increase = 15;
-    }
+        increase = 15;
+      }
     let settings = {
       ...DEFAULT_INDUSTRY_SETTINGS,
       employees: {
@@ -689,10 +707,10 @@ const productLoop = async (ns, industry, division, output) => {
   // Upgrade 1 level per round until MIN if we have money
   for (const city of CITIES) {
     let warehouseBudget = ns.corporation.getCorporation().funds * SETTING_WAREHOUSE_CAP;
-    if (ns.corporation.getWarehouse(division, city).size < SETTING_WAREHOUSE_MIN &&
+    if (ns.corporation.getWarehouse(division, city).size < SETTING_WAREHOUSE_MIN && 
       warehouseBudget > ns.corporation.getUpgradeWarehouseCost(division, city)) {
-      ns.corporation.upgradeWarehouse(division, city);
-    }
+        ns.corporation.upgradeWarehouse(division, city);
+      }
   }
 
   // Check research
@@ -714,8 +732,8 @@ const productLoop = async (ns, industry, division, output) => {
 }
 
 /**
- * @param {NS} ns
- * @param {string} division
+ * @param {NS} ns 
+ * @param {string} division 
  * @param {boolean} output
  * @returns {Promise<void>}
  */
@@ -745,11 +763,11 @@ const manageProducts = async (ns, division, output = false) => {
   }
   // Make sure all products are being sold
   for (const product of ns.corporation.getDivision(division).products.map(prod => ns.corporation.getProduct(division, prod))) {
-    // ns.print(`Prod: ${product.name} sCost: ${product.sCost} prod: ${product.cityData[CITY_AEVUM][1]} sell: ${product.cityData[CITY_AEVUM][2]}`);
+    //ns.print(`Prod: ${product.name} sCost: ${product.sCost} prod: ${product.cityData[CITY_AEVUM][1]} sell: ${product.cityData[CITY_AEVUM][2]}`);
     // Sell starts at 0, make it MP*1
     if (!isNaN(product.sCost) || !product.sCost.includes('MP')) {
       ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*1', true);
-    }
+    } 
     // If we have TA2, use it
     if (ns.corporation.hasResearched(division, MARKET_TA2)) {
       if (product.cityData[CITY_AEVUM][0] < 1000)
@@ -757,13 +775,15 @@ const manageProducts = async (ns, division, output = false) => {
       else
         ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*1', true);
     } else {
+      let produced = product.cityData[CITY_AEVUM][1];
+      let sold = product.cityData[CITY_AEVUM][2];
       // We don't have TA2, change price if we're not selling out
-      if (product.cityData[CITY_AEVUM][1] > product.cityData[CITY_AEVUM][2]) {
+      if (produced > 0 && produced > sold) {
         // if production > sold, lower price
         let currentMult = Number(product.sCost.slice('MP*'.length));
         // if currently MP*1 or less, cut price in half instead of subtracting 1
-        ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*' + (currentMult <= 1 ? currentMult * 0.5 : currentMult - 1), true);
-      } else if (product.cityData[CITY_AEVUM][1] / product.cityData[CITY_AEVUM][2] < 0.95) {
+        ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*' + (currentMult <= 1 ? 1 : currentMult - 1), true);
+      } else if (produced > 0 && produced <= sold) {
         // if demand is more than 5% above supply, increase price
         let currentMult = Number(product.sCost.slice('MP*'.length));
         ns.corporation.sellProduct(division, CITY_AEVUM, product.name, 'MAX', 'MP*' + (currentMult < 1 ? 1 : currentMult + 1), true);
@@ -774,7 +794,7 @@ const manageProducts = async (ns, division, output = false) => {
 
 /**
  * See if we can upgrade and do so if we can
- * @param {NS} ns
+ * @param {NS} ns 
  * @param {string} upgrade
  * @param {number} cap
  * @returns {boolean}

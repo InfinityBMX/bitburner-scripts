@@ -39,7 +39,7 @@ const scripts = {
 	SLEEVE_MANAGER: { // 50.3GB
 		name: 'sleeve-manager.js',
 		args: [],
-		earlyPriority: 4,
+		earlyPriority: 6,
 		latePriority: 5
 	},
 	TARGET_UPDATER: { // 5.4GB + 9.5GB Max + 13.05GB Orch = 27.95GB
@@ -65,6 +65,18 @@ const scripts = {
 		args: [],
 		earlyPriority: 0,
 		latePriority: 8
+	},
+	CORP_MANAGER: { //1.02TB
+		name: 'corp-manager.js',
+		args: [],
+		earlyPriority: 0,
+		latePriority: 9
+	},
+	CRIME_IT_UP: {
+		name: 'crime-it-up.js',
+		args: [],
+		earlyPriority: 4,
+		latePriority: 0
 	}
 };
 
@@ -82,11 +94,7 @@ export async function main(ns) {
 		previousRAM ?
 			previousRAM.pservRAM[0] :
 			32;
-	scripts.PURCHASE_SERVERS.args.push(ram);
-	
-	ns.tprint(`START.JS previousRAM: ${previousRAM.pservRAM}`);
-	ns.tprint(`START.JS ram: ${ram}`);
-	ns.tprint(`START.JS args: ${scripts.PURCHASE_SERVERS.args}`);
+	scripts.PURCHASE_SERVERS.args = [ram];
 
 	let scriptQueue = [
 		'HACK_SERVERS',
@@ -98,13 +106,16 @@ export async function main(ns) {
 		'TARGET_UPDATER',
 		'RAM_MANAGER',
 		'RAM_MANAGER_EARLY',
-		'BLADEBURNER_MANAGER'
+		'BLADEBURNER_MANAGER',
+		'CORP_MANAGER',
+		'CRIME_IT_UP'
 	];
 
 	scriptQueue = scriptQueue.filter(script => latePhase ? scripts[script].latePriority !== 0 : scripts[script].earlyPriority !== 0)
 		.sort((script1, script2) => latePhase ? scripts[script1].latePriority - scripts[script2].latePriority : scripts[script1].earlyPriority - scripts[script2].earlyPriority);
 
 	ns.tprint('Starting');
+	let counter = 1;
 	while (scriptQueue.length > 0) {
 		for (const script of scriptQueue){
 			const { name, args } = scripts[script];
@@ -116,12 +127,15 @@ export async function main(ns) {
 				ns.exec(name, 'home', 1, ...args);
 				scriptQueue = scriptQueue.filter(s => s !== script);
 			} else {
-				ns.tprint(`Can't start ${name}. Not enough free RAM.`);
+				if (counter % 100 === 1)
+					ns.tprint(`Round ${counter} - Can't start ${name}. Not enough free RAM. Requires ${ns.getScriptRam(name)}GB and have ${getAvailableRAM(ns, 'home')}GB`);
 			}
 			await ns.sleep(interval);
 		}
-		if (scriptQueue.length)
+		if (scriptQueue.length) {
 			await ns.sleep(retryInterval);
+			counter++;
+		}
 	}
 
 	ns.tprint('All scripts started');

@@ -10,35 +10,28 @@ export async function main(ns) {
     let round = 1;
     console.log(`Found ${hostnames.length} servers`);
     let currentAbilities = getAbilities(ns); 
-    while (!complete) {
-        console.log('Hacking abilities: ', currentAbilities, 'Hacking level: ', ns.getPlayer().hacking);
-        // filter is a sync function
-        unhacked = hostnames.filter(hostname => {
-            const server = ns.getServer(hostname);
-            // See if hacked
-            if (server.hasAdminRights) {
-                return false;
-            }
-            if (server.numOpenPortsRequired > currentAbilities) { // Since it's early, only hack servers we can hack with our current files
-                return false;
-            }
-            if (server.requiredHackingSkill <= ns.getPlayer().hacking) {
-                console.log('Found server to hack: ', hostname);
-                hackServer(ns, hostname);
-            } else {
-                console.log('Server Unhackable: ', hostname, server.numOpenPortsRequired, server.requiredHackingSkill);
-            }
-            return !server.hasAdminRights;
-        });
-        if (unhacked.length) {
-            console.log(`${unhacked.length} unhacked servers left: `, unhacked);
-            round++;
-            await ns.sleep(Math.min(round * 30000, INTERVAL));
-        } else {
-            complete = true;
+    console.log('Hacking abilities: ', currentAbilities, 'Hacking level: ', ns.getPlayer().hacking);
+    // filter is a sync function
+    unhacked = hostnames.filter(hostname => {
+        const server = ns.getServer(hostname);
+        // See if hacked
+        if (server.hasAdminRights) {
+            return false;
         }
+        if (server.numOpenPortsRequired > currentAbilities) { // Since it's early, only hack servers we can hack with our current files
+            return false;
+        }
+        if (server.requiredHackingSkill <= ns.getPlayer().hacking) {
+            console.log('Found server to hack: ', hostname);
+            hackServer(ns, hostname);
+        } else {
+            console.log('Server Unhackable: ', hostname, server.numOpenPortsRequired, server.requiredHackingSkill);
+        }
+        return !server.hasAdminRights;
+    });
+    if (unhacked.length) {
+        ns.tprint(`${unhacked.length} unhacked servers left`);
     }
-    ns.tprint('Everything hacked!');
 }
 
 function getAllHostnames(ns) {

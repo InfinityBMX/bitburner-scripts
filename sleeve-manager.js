@@ -68,25 +68,28 @@ export async function main(ns) {
 			let sleeveStats = sleeve.getSleeveStats(i);
 			let { shock, sync } = sleeveStats;
 
-			// Manage augs
-			if (shock == 0 && availableAugs[i] == null) // No augs are available 
-				availableAugs[i] = sleeve.getSleevePurchasableAugs(i).sort((a, b) => a.cost - b.cost);
-			if (shock == 0 && availableAugs[i].length > 0) {
-				const cooldownLeft = Math.max(0, options['buy-cooldown'] - (Date.now() - (lastPurchase[i] || 0)));
-				const [batchCount, batchCost] = availableAugs[i].reduce(([n, c], aug) => c + aug.cost <= budget ? [n + 1, c + aug.cost] : [n, c], [0, 0]);
-				const purchaseUpdate = `sleeve ${i} can afford ${batchCount.toFixed(0).padStart(2)}/${availableAugs[i].length.toFixed(0).padEnd(2)} remaining augs (cost ${formatMoney(batchCost)} of ` +
-                    `${formatMoney(availableAugs[i].reduce((t, aug) => t + aug.cost, 0))}).`;
-				if (lastUpdate[i] != purchaseUpdate)
-                    log(ns, `INFO: With budget ${formatMoney(budget)}, ` + (lastUpdate[i] = purchaseUpdate) + ` (Min batch size: ${options['min-aug-batch']}, Cooldown: ${formatDuration(cooldownLeft)})`);
-				if (cooldownLeft == 0 && batchCount > 0 && ((batchCount >= availableAugs[i].length - 1) || batchCount >= options['min-aug-batch'])) { // Don't require the last aug it's so much more expensive
-                    let strAction = `Purchase ${batchCount} augmentations for sleeve ${i} at total cost of ${formatMoney(batchCost)}`;
-                    let toPurchase = availableAugs[i].splice(0, batchCount);
-                    budget -= batchCost;
-                    if (toPurchase.map(a => a.name).reduce((s, aug) => s && sleeve.purchaseSleeveAug(i, aug), true))
-                        log(ns, `SUCCESS: ${strAction}`, 'success');
-                    else log(ns, `ERROR: Failed to ${strAction}`, 'error');
-                    lastPurchase[i] = Date.now();
-                }
+			// Don't spend money on augs when we need a corp
+			if (ns.getPlayer().hasCorporation) {
+				// Manage augs
+				if (shock == 0 && availableAugs[i] == null) // No augs are available 
+					availableAugs[i] = sleeve.getSleevePurchasableAugs(i).sort((a, b) => a.cost - b.cost);
+				if (shock == 0 && availableAugs[i].length > 0) {
+					const cooldownLeft = Math.max(0, options['buy-cooldown'] - (Date.now() - (lastPurchase[i] || 0)));
+					const [batchCount, batchCost] = availableAugs[i].reduce(([n, c], aug) => c + aug.cost <= budget ? [n + 1, c + aug.cost] : [n, c], [0, 0]);
+					const purchaseUpdate = `sleeve ${i} can afford ${batchCount.toFixed(0).padStart(2)}/${availableAugs[i].length.toFixed(0).padEnd(2)} remaining augs (cost ${formatMoney(batchCost)} of ` +
+						`${formatMoney(availableAugs[i].reduce((t, aug) => t + aug.cost, 0))}).`;
+					if (lastUpdate[i] != purchaseUpdate)
+						log(ns, `INFO: With budget ${formatMoney(budget)}, ` + (lastUpdate[i] = purchaseUpdate) + ` (Min batch size: ${options['min-aug-batch']}, Cooldown: ${formatDuration(cooldownLeft)})`);
+					if (cooldownLeft == 0 && batchCount > 0 && ((batchCount >= availableAugs[i].length - 1) || batchCount >= options['min-aug-batch'])) { // Don't require the last aug it's so much more expensive
+						let strAction = `Purchase ${batchCount} augmentations for sleeve ${i} at total cost of ${formatMoney(batchCost)}`;
+						let toPurchase = availableAugs[i].splice(0, batchCount);
+						budget -= batchCost;
+						if (toPurchase.map(a => a.name).reduce((s, aug) => s && sleeve.purchaseSleeveAug(i, aug), true))
+							log(ns, `SUCCESS: ${strAction}`, 'success');
+						else log(ns, `ERROR: Failed to ${strAction}`, 'error');
+						lastPurchase[i] = Date.now();
+					}
+				}
 			}
 
 			// Manage the sleeve task
@@ -127,7 +130,14 @@ export async function main(ns) {
                     log(ns, `INFO: Sleeve ${i} is recovering from shock... ${shock.toFixed(2)}%`);
                     lastUpdate[i] = Date.now();
                 }
-            } else if (i == 0 && playerInfo.isWorking && playerInfo.workType == "Working for Faction") { // If player is currently working for faction rep, sleeves 0 shall help him out (only one sleeve can work for a faction)
+            } else if (!ns.gang.inGang() && sleeveStats.strength > 45) {
+				let crime = 'homicide';
+				designatedTask = TASK_CRIME;
+                designatedTaskDesc = `commit ${crime}`;
+				// Don't change tasks if we've changed tasks recently
+            	if (Date.now() - (lastReassign[i] || 0) < minTaskWorkTime || task[i] == designatedTask) continue;
+                command = sleeve.setToCommitCrime(i, crime);
+			} else if (i == 0 && playerInfo.isWorking && playerInfo.workType == "Working for Faction") { // If player is currently working for faction rep, sleeves 0 shall help him out (only one sleeve can work for a faction)
                 let work = works[workByFaction[playerInfo.currentWorkFactionName] || 0];
 				designatedTask = TASK_FACTION;
                 designatedTaskDesc = `work for faction '${playerInfo.currentWorkFactionName}' (${work})`;
@@ -217,7 +227,7 @@ export async function main(ns) {
 	// }
 }
 
-const resetDetected = (player) => player.playtimeSinceLastAug < RESET_THRESHOLD;
+const resetDetected = (player) => player.playtimeSinceLastAug < RESET_THRESHOLD && player.playtimeSinceLastBitnode > player.playtimeSinceLastAug;
 
 const playerNeedsHelp = (player, previous) => STATS.reduce((result, stat) => result || player[stat] < previous[stat] * RESET_TRAINING, false);
 

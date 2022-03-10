@@ -1,6 +1,6 @@
 import { formatMoney, formatNumberShort } from './utils/formats.js'
 
-const default_home_spend = 0.8; // Don't spend more than this proportion of money
+const DEFAULT_HOME_SPEND = 1; // Don't spend more than this proportion of money
 const INTERVAL = 5000;
 const FAIL_UPDATE_FREQUENCY = 15;
 
@@ -11,7 +11,7 @@ export async function main(ns) {
 	ns.disableLog('getServerMaxRam');
 	const max_spend_ratio = ns.args[0] ?
 		ns.args[0] :
-		default_home_spend;
+		DEFAULT_HOME_SPEND;
 	let round = 1;
 	while (true) {
 		let currentRam = ns.getServerMaxRam("home");
@@ -25,6 +25,7 @@ export async function main(ns) {
 				ns.print(`Money we're allowed to spend (${formatMoney(spendable)}) is less than the cost (${formatMoney(cost)}) to upgrade ${upgradeDesc}.`);
 		} else if (ns.upgradeHomeRam()) {
 			announce(ns, `SUCCESS: Upgraded ${upgradeDesc}`, 'success');
+			ns.tprint(`Next home RAM upgrade is ${formatMoney(ns.getUpgradeHomeRamCost())} for ${nextRam * 2}GB`);
 			if (nextRam != ns.getServerMaxRam("home"))
 				announce(ns, `WARNING: Expected to upgrade ${upgradeDesc}, but new home ram is ${formatNumberShort(ns.getServerMaxRam("home"))}GB`, 'warning');
 		} else {
